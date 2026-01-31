@@ -7,14 +7,12 @@ type ProjectHeroProps = {
   slug: string;
   mediaType: "video" | "image";
   src: string;
-  poster?: string;
 };
 
 export default function ProjectHero({
   slug,
   mediaType,
   src,
-  poster,
 }: ProjectHeroProps) {
   return (
     <motion.section
@@ -48,8 +46,6 @@ export default function ProjectHero({
         <MediaBlock
           type={mediaType}
           src={src}
-          poster={poster}
-          autoplay={mediaType === "video"}
           mode="hero"
         />
       </div>
