@@ -3,7 +3,6 @@
 import MediaBlock from "@/components/MediaBlock";
 import Link from "next/link";
 import { projects } from "@/lib/projects";
-import { motion } from "framer-motion";
 
 export default function ProjectStack() {
   return (
@@ -17,16 +16,15 @@ export default function ProjectStack() {
           <article
             className="
               px-6 md:px-16
-              py-[18vh]
+              py-[12vh]
               border-t border-black/10
               bg-black/[0.015]
-              transition-colors
             "
           >
-            {/* META — SLIDE LEFT */}
+            {/* META */}
             <div
               className="
-                max-w-4xl mb-[8vh]
+                max-w-4xl mb-[6vh]
                 transition-transform duration-500 ease-out
                 group-hover:-translate-x-1
               "
@@ -34,7 +32,6 @@ export default function ProjectStack() {
               <h2 className="text-2xl md:text-4xl font-medium mb-1">
                 {project.title}
               </h2>
-
               <p className="text-meta">
                 {project.year} · {project.mediaType}
               </p>
@@ -42,28 +39,39 @@ export default function ProjectStack() {
 
             {/* MEDIA */}
             <div className="px-0 md:px-16">
-              <motion.div
-                layout
-                layoutId={`project-media-${project.slug}`}
-                className="
-                  aspect-video
-                  bg-neutral-900
-                  overflow-hidden
-                  rounded-none
-                  transform-gpu
-                  transition-transform duration-500 ease-out
-                  group-hover:translate-x-1
-                  group-hover:scale-[1.005]
-                  motion-reduce:transition-none
-                "
+              <div
+                className="relative aspect-video overflow-hidden group project-card"
+                onClick={(e) => {
+                  // Mobile tap handling
+                  if (window.matchMedia("(hover: none)").matches) {
+                    const card = e.currentTarget;
+                    if (!card.classList.contains("is-active")) {
+                      e.preventDefault();
+                      card.classList.add("is-active");
+                      return;
+                    }
+                  }
+                }}
               >
+                {/* MEDIA */}
                 <MediaBlock
                   type={project.mediaType}
                   src={project.src}
-                  poster={project.poster}
                   mode="poster"
                 />
-              </motion.div>
+
+                {/* OVERLAY */}
+                <div className="project-hover-overlay">
+                  <h3 className="project-hover-title">
+                    {project.title}
+                  </h3>
+
+                  <span className="project-hover-action">
+                    View Project
+                  </span>
+                </div>
+              </div>
+
             </div>
           </article>
         </Link>

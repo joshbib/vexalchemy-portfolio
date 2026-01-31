@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 const COLLAGE_IMAGES = [
+  "/collage/1.png",
   "/collage/2.png",
   "/collage/3.png",
   "/collage/4.png",

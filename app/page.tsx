@@ -2,6 +2,7 @@ import ProjectStack from "@/components/ProjectStack";
 import CollageStack from "@/components/CollageStack";
 import PageFade from "@/components/PageFade";
 import Link from "next/link";
+import FeaturedProject from "@/components/FeaturedProject";
 
 export default function Home() {
   return (

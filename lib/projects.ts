@@ -2,16 +2,15 @@ import type { Project } from "./project-types";
 
 export const projects: Project[] = [
   {
-    slug: "Fluid-Growth",
+    slug: "fluid-growth",
     title: "Fluid Growth",
     year: "2024",
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
-    src: "/projects/Fluid-Growth/Fluid-Growth.mp4",
-    poster: "/projects/Fluid-Growth/Fluid-Growth-poster.png",
+    src: "/projects/fluid-growth/fluid-growth.mp4",
+    poster: "/projects/fluid-growth/fluid-growth-poster.png",
 
-    // Extended media shown below navigation
     mediaStack: [
       {
         type: "image",
