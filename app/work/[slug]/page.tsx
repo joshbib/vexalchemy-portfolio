@@ -28,11 +28,27 @@ export default async function ProjectPage({ params }: PageProps) {
       <main className="min-h-screen">
         {/* BACK */}
         <div className="px-6 md:px-16 pt-12">
-          <Link
+         <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition"
+            className="
+              inline-flex
+              items-center
+              gap-2
+              text-sm
+              text-gray-500
+              transition-all
+              duration-300
+              ease-out
+              hover:text-black
+              group
+            "
           >
-            ← Back to work
+            <span className="transition-transform duration-300 ease-out group-hover:-translate-x-3">
+              ←
+            </span>
+            <span className="transition-transform duration-300 ease-out group-hover:-translate-x-1">
+              Back to work
+            </span>
           </Link>
         </div>
 
@@ -57,34 +73,57 @@ export default async function ProjectPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* PREV / NEXT */}
-        <section className="px-6 md:px-16 pb-40">
-          <div className="flex justify-center">
-            <div
-              className="
-                w-full
-                max-w-5xl
-                flex
-                justify-between
-                text-sm
-              "
-            >
-              <Link
-                href={`/work/${prevProject.slug}`}
-                className="text-gray-500 hover:text-black transition"
-              >
-                ← {prevProject.title}
-              </Link>
+       {/* PREV / NEXT */}
+      <section className="px-6 md:px-16 pb-40">
+        <div className="flex justify-center">
+          <div
+            className="
+              w-full
+              max-w-5xl
+              flex
+              justify-between
+              text-sm
+            "
+          >
+            <Link
+            href={`/work/${prevProject.slug}`}
+            className="
+              inline-flex
+              items-center
+              gap-2
+              text-gray-500
+              transition-all
+              duration-300
+              ease-out
+              hover:text-black
+              hover:-translate-x-3
+            "
+          >
+            ← <span>{prevProject.title}</span>
+          </Link>
 
-              <Link
-                href={`/work/${nextProject.slug}`}
-                className="text-gray-500 hover:text-black transition text-right"
-              >
-                {nextProject.title} →
-              </Link>
-            </div>
+           <Link
+            href={`/work/${nextProject.slug}`}
+            className="
+              inline-flex
+              items-center
+              gap-2
+              text-gray-500
+              transition-all
+              duration-300
+              ease-out
+              hover:text-black
+              hover:translate-x-3
+              text-right
+            "
+          >
+            <span>{nextProject.title}</span> →
+          </Link>
+
           </div>
-        </section>
+        </div>
+      </section>
+
       </main>
     </PageFade>
   );

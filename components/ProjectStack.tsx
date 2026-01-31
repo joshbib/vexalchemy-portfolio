@@ -23,8 +23,14 @@ export default function ProjectStack() {
               hover:bg-black/[0.025]
             "
           >
-            {/* META */}
-            <div className="max-w-4xl mb-[8vh]">
+            {/* META — SLIDE LEFT */}
+            <div
+              className="
+                max-w-4xl mb-[8vh]
+                transition-transform duration-500 ease-out
+                group-hover:-translate-x-2
+              "
+            >
               <h2 className="text-2xl md:text-4xl font-medium mb-1">
                 {project.title}
               </h2>
@@ -34,23 +40,23 @@ export default function ProjectStack() {
               </p>
             </div>
 
-            {/* MEDIA */}
+            {/* MEDIA — SLIDE RIGHT + SCALE */}
             <div className="px-0 md:px-16">
               <motion.div
-              layout
-              layoutId={`project-media-${project.slug}`}
-              className="
-                aspect-video
-                bg-neutral-900
-                overflow-hidden
-                rounded-none
-                transform-gpu
-                transition-transform duration-500 ease-out
-                group-hover:scale-[1.01]
-                motion-reduce:transition-none
-              "
-            >
-
+                layout
+                layoutId={`project-media-${project.slug}`}
+                className="
+                  aspect-video
+                  bg-neutral-900
+                  overflow-hidden
+                  rounded-none
+                  transform-gpu
+                  transition-all duration-500 ease-out
+                  group-hover:translate-x-2
+                  group-hover:scale-[1.01]
+                  motion-reduce:transition-none
+                "
+              >
                 <MediaBlock
                   type={project.mediaType}
                   src={project.src}

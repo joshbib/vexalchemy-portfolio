@@ -199,3 +199,53 @@ video {
   transform: scaleX(1);
   transform-origin: left;
 }
+/* -------------------------
+   PROJECT NAV — SLUG PAGE (FIXED)
+-------------------------- */
+
+.project-nav-link {
+  position: relative;
+  display: inline-block; /* IMPORTANT */
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease;
+  will-change: transform;
+}
+
+/* Previous slides left */
+.project-nav-prev:hover {
+  transform: translateX(-8px);
+}
+
+/* Next slides right */
+.project-nav-next:hover {
+  transform: translateX(8px);
+}
+
+/* underline sweep */
+.project-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px; /* avoids clash with text */
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.25s ease;
+}
+
+@media (hover: hover) {
+  .project-nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Mobile / keyboard */
+.project-nav-link:active,
+.project-nav-link:focus-visible {
+  opacity: 0.6;
+}
+

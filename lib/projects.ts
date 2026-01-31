@@ -2,14 +2,32 @@ import type { Project } from "./project-types";
 
 export const projects: Project[] = [
   {
-    slug: "metamorph-studies",
-    title: "Metamorph Studies",
+    slug: "Fluid-Growth",
+    title: "Fluid Growth",
     year: "2024",
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
-    src: "/projects/metamorph-studies/sample.mp4",
-    poster: "/images/sample.png",
+    src: "/projects/Fluid-Growth/Fluid-Growth.mp4",
+    poster: "/projects/Fluid-Growth/Fluid-Growth-poster.png",
+
+    // Extended media shown below navigation
+    mediaStack: [
+      {
+        type: "image",
+        src: "/projects/metamorph-studies/frame-01.jpg",
+        alt: "Metamorph study still frame",
+      },
+      {
+        type: "image",
+        src: "/projects/metamorph-studies/frame-02.jpg",
+      },
+      {
+        type: "video",
+        src: "/projects/metamorph-studies/bts.mp4",
+        poster: "/projects/metamorph-studies/bts-poster.jpg",
+      },
+    ],
   },
   {
     slug: "procedural-relics",
@@ -20,15 +38,6 @@ export const projects: Project[] = [
     mediaType: "video",
     src: "/videos/sample1.mp4",
     poster: "/images/sample1.png",
-  },
-  {
-    slug: "synthetic-forms",
-    title: "Synthetic Forms",
-    year: "2023",
-    description:
-      "Still explorations of form, density, and structure.",
-    mediaType: "image",
-    src: "/images/sample.png",
   },
   {
     slug: "fluid-rituals",
