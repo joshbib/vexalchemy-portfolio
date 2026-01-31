@@ -19,8 +19,8 @@ export default function ProjectStack() {
               px-6 md:px-16
               py-[18vh]
               border-t border-black/10
+              bg-black/[0.015]
               transition-colors
-              hover:bg-black/[0.025]
             "
           >
             {/* META — SLIDE LEFT */}
@@ -28,7 +28,7 @@ export default function ProjectStack() {
               className="
                 max-w-4xl mb-[8vh]
                 transition-transform duration-500 ease-out
-                group-hover:-translate-x-2
+                group-hover:-translate-x-1
               "
             >
               <h2 className="text-2xl md:text-4xl font-medium mb-1">
@@ -40,7 +40,7 @@ export default function ProjectStack() {
               </p>
             </div>
 
-            {/* MEDIA — SLIDE RIGHT + SCALE */}
+            {/* MEDIA */}
             <div className="px-0 md:px-16">
               <motion.div
                 layout
@@ -51,9 +51,9 @@ export default function ProjectStack() {
                   overflow-hidden
                   rounded-none
                   transform-gpu
-                  transition-all duration-500 ease-out
-                  group-hover:translate-x-2
-                  group-hover:scale-[1.01]
+                  transition-transform duration-500 ease-out
+                  group-hover:translate-x-1
+                  group-hover:scale-[1.005]
                   motion-reduce:transition-none
                 "
               >
@@ -61,6 +61,7 @@ export default function ProjectStack() {
                   type={project.mediaType}
                   src={project.src}
                   poster={project.poster}
+                  mode="poster"
                 />
               </motion.div>
             </div>

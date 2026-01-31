@@ -17,7 +17,7 @@ export default function ProjectHero({
   poster,
 }: ProjectHeroProps) {
   return (
-    <motion.div
+    <motion.section
       layout
       layoutId={`project-media-${slug}`}
       transition={{
@@ -28,18 +28,34 @@ export default function ProjectHero({
       }}
       className="
         w-full
-        max-w-5xl
-        bg-neutral-900
-        overflow-hidden
-        rounded-none
+        flex
+        flex-col
+        items-center
+        pt-16
+        pb-20
       "
     >
-      <MediaBlock
-        type={mediaType}
-        src={src}
-        poster={poster}
-        autoplay
-      />
-    </motion.div>
+      {/* MEDIA */}
+      <div
+        className="
+          w-full
+          max-w-[520px]
+          max-h-[55vh]
+          flex
+          justify-center
+        "
+      >
+        <MediaBlock
+          type={mediaType}
+          src={src}
+          poster={poster}
+          autoplay={mediaType === "video"}
+          mode="hero"
+        />
+      </div>
+
+      {/* SUBTLE END MARK */}
+      <div className="mt-16 w-16 h-px bg-black/10" />
+    </motion.section>
   );
 }
