@@ -630,3 +630,125 @@ video {
 .media-sound.sound-enabled .sound-icon::before {
   transform: translateX(-0.25px);
 }
+
+/* -------------------------
+   GHOST HANDLE — DRAG AFFORDANCE
+-------------------------- */
+
+.ghost-handle {
+  position: fixed;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 36px;
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  pointer-events: none;
+  user-select: none;
+
+  /* Soft depth */
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  /* Breathing motion */
+  animation: ghost-breathe 2.6s ease-in-out infinite;
+}
+
+/* Subtle vertical cue */
+@keyframes ghost-breathe {
+  0% {
+    opacity: 0.35;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  100% {
+    opacity: 0.35;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Kill animation once user starts dragging */
+.media-overlay-exit .ghost-handle {
+  animation: none;
+  opacity: 0;
+}
+
+/* -------------------------
+   DESKTOP ESC HINT (EDITORIAL)
+-------------------------- */
+
+.esc-hint {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+
+  color: rgba(0, 0, 0, 0.55);
+
+  pointer-events: none;
+  user-select: none;
+
+  opacity: 0.85;
+}
+
+/* Key capsule */
+.esc-key {
+  padding: 0.2rem 0.38rem;
+
+  font-size: 9px;
+  letter-spacing: 0.12em;
+
+  border-radius: 4px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(240, 240, 240, 0.9)
+    );
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Label */
+.esc-text {
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  opacity: 0.7;
+}
+
+/* Desktop only */
+@media (hover: none) {
+  .esc-hint {
+    display: none;
+  }
+}
+/* -------------------------
+   GHOST HANDLE — MOBILE ONLY
+-------------------------- */
+
+/* Hide on desktop / hover-capable devices */
+@media (hover: hover) and (pointer: fine) {
+  .ghost-handle {
+    display: none;
+  }
+}

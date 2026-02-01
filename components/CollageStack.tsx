@@ -121,10 +121,13 @@ export default function CollageStack() {
               </div>
             </div>
 
-            {/* HINT */}
-            <div className="media-exit-hint">
-              <span className="hint-touch">Swipe up or down to close</span>
-              <span className="hint-keyboard">Press ESC to close</span>
+            {/* 👻 MOBILE — GHOST HANDLE */}
+            <div className="ghost-handle" />
+
+            {/* ⌨️ DESKTOP — ESC HINT */}
+            <div className="esc-hint">
+              <span className="esc-key">ESC</span>
+              <span className="esc-text">Close</span>
             </div>
           </div>,
           document.body
