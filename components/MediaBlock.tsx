@@ -16,6 +16,11 @@ export default function MediaBlock({
 }: MediaBlockProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  // ✅ gesture refs (DO NOT use `let`)
+  const startX = useRef(0);
+  const startTime = useRef(0);
+  const wasPlaying = useRef(false);
+
   /* --------------------------------
      REGISTER VIDEO WITH CONTROLLER
   --------------------------------- */
@@ -92,12 +97,15 @@ export default function MediaBlock({
   }
 
   /* -------------------------
-     HERO MODE
+     HERO MODE — IMAGE
   -------------------------- */
   if (type === "image") {
     return <img src={src} alt="" className="block max-w-full h-auto" />;
   }
 
+  /* -------------------------
+     HERO VIDEO — CALM SWIPE SCRUB
+  -------------------------- */
   return (
     <div
       className="relative media-sound"
@@ -109,7 +117,6 @@ export default function MediaBlock({
           video.muted = false;
           video.play().catch(() => {});
           video.parentElement?.classList.add("sound-enabled");
-          video.parentElement?.classList.remove("sound-muted");
         } else {
           video.paused ? video.play() : video.pause();
         }
@@ -124,6 +131,42 @@ export default function MediaBlock({
         playsInline
         preload="auto"
         className="block max-w-full h-auto cursor-pointer select-none"
+        style={{ touchAction: "pan-y" }} // keep vertical scroll
+        onTouchStart={(e) => {
+          const video = videoRef.current;
+          if (!video) return;
+
+          const t = e.touches[0];
+          startX.current = t.clientX;
+          startTime.current = video.currentTime;
+          wasPlaying.current = !video.paused;
+
+          video.pause();
+        }}
+        onTouchMove={(e) => {
+          const video = videoRef.current;
+          if (!video) return;
+
+          const dx = e.touches[0].clientX - startX.current;
+
+          // 120px swipe ≈ full duration
+          const scrubRatio = dx / 120;
+          const nextTime =
+            startTime.current + scrubRatio * video.duration;
+
+          video.currentTime = Math.max(
+            0,
+            Math.min(video.duration, nextTime)
+          );
+        }}
+        onTouchEnd={() => {
+          const video = videoRef.current;
+          if (!video) return;
+
+          if (wasPlaying.current) {
+            video.play().catch(() => {});
+          }
+        }}
       />
 
       <span className="sound-hint">

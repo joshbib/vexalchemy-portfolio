@@ -2,7 +2,6 @@ import ProjectStack from "@/components/ProjectStack";
 import CollageStack from "@/components/CollageStack";
 import PageFade from "@/components/PageFade";
 import Link from "next/link";
-import FeaturedProject from "@/components/FeaturedProject";
 
 export default function Home() {
   return (
@@ -10,12 +9,20 @@ export default function Home() {
       <main className="flex flex-col">
 
         {/* HERO */}
-        <section className="min-h-screen flex items-center px-6 md:px-16">
+        <section className="min-h-[100svh] flex items-center px-6 md:px-16">
           <div className="w-full flex flex-col md:flex-row md:items-start md:justify-between">
 
             {/* LEFT */}
             <div className="max-w-5xl">
-              <h1 className="text-4xl md:text-6xl font-medium leading-[1.05] mb-6">
+              <h1
+                className="
+                  text-4xl md:text-6xl
+                  font-medium
+                  leading-[1.05]
+                  mb-6
+                  motion-safe:will-change-transform
+                "
+              >
                 Vex Alchemy
               </h1>
 
@@ -35,15 +42,25 @@ export default function Home() {
                 mt-12 md:mt-0
               "
             >
-              <a href="#work" className="nav-link">
+              {/* Anchor links: NO animation on mobile */}
+              <a
+                href="#work"
+                className="nav-link"
+              >
                 View work
               </a>
 
-              <Link href="/about" className="nav-link">
+              <Link
+                href="/about"
+                className="nav-link"
+              >
                 About
               </Link>
 
-              <a href="mailto:joshibibekraj@gmail.com" className="nav-link">
+              <a
+                href="mailto:joshibibekraj@gmail.com"
+                className="nav-link"
+              >
                 Contact
               </a>
             </nav>
@@ -51,11 +68,11 @@ export default function Home() {
         </section>
 
         {/* PROJECTS */}
-        <div id="work">
+        <section id="work">
           <ProjectStack />
-        </div>
+        </section>
 
-        {/* COLLAGE / AFTERTHOUGHT */}
+        {/* COLLAGE */}
         <CollageStack />
 
       </main>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import MediaBlock from "@/components/MediaBlock";
 
 type ProjectHeroProps = {
@@ -14,15 +14,15 @@ export default function ProjectHero({
   mediaType,
   src,
 }: ProjectHeroProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.section
-      layout
-      layoutId={`project-media-${slug}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{
-        type: "spring",
-        stiffness: 160,
-        damping: 28,
-        mass: 1.2,
+        duration: prefersReducedMotion ? 0 : 0.28,
+        ease: "easeOut",
       }}
       className="
         w-full
@@ -33,7 +33,7 @@ export default function ProjectHero({
         pb-20
       "
     >
-      {/* MEDIA */}
+      {/* MEDIA — size NEVER animates */}
       <div
         className="
           w-full
@@ -50,7 +50,6 @@ export default function ProjectHero({
         />
       </div>
 
-      {/* SUBTLE END MARK */}
       <div className="mt-16 w-16 h-px bg-black/10" />
     </motion.section>
   );
