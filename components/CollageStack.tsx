@@ -3,34 +3,38 @@
 import { useState, useEffect } from "react";
 import { COLLAGE_IMAGES } from "@/lib/collage-images";
 import { createPortal } from "react-dom";
-
+import { useSwipeGallery } from "@/components/hooks/useSwipeGallery";
 
 export default function CollageStack() {
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [closing, setClosing] = useState(false);
+  const [direction, setDirection] = useState<
+    "next" | "prev" | "up" | "down" | null
+  >(null);
 
   function close() {
     if (closing) return;
     setClosing(true);
     setTimeout(() => {
-      setActiveImage(null);
+      setActiveIndex(null);
+      setDirection(null);
       setClosing(false);
     }, 180);
   }
 
   // ESC close
   useEffect(() => {
-    if (!activeImage) return;
+    if (activeIndex === null) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [activeImage]);
+  }, [activeIndex]);
 
   // Lock background scroll
   useEffect(() => {
-    if (!activeImage) return;
+    if (activeIndex === null) return;
     const y = window.scrollY;
     document.body.style.position = "fixed";
     document.body.style.top = `-${y}px`;
@@ -41,7 +45,21 @@ export default function CollageStack() {
       document.body.style.width = "";
       window.scrollTo(0, y);
     };
-  }, [activeImage]);
+  }, [activeIndex]);
+
+  const swipe = useSwipeGallery({
+    count: COLLAGE_IMAGES.length,
+    index: activeIndex ?? 0,
+    onIndexChange: (i) => {
+      if (activeIndex === null) return;
+      setDirection(i > activeIndex ? "next" : "prev");
+      setActiveIndex(i);
+    },
+    onClose: (dir) => {
+      setDirection(dir);
+      close();
+    },
+  });
 
   return (
     <>
@@ -60,29 +78,43 @@ export default function CollageStack() {
               src={src}
               loading="lazy"
               className="collage-item mb-6 cursor-pointer"
-              onClick={() => setActiveImage(src)}
+              onClick={() => setActiveIndex(i)}
             />
           ))}
         </div>
       </section>
 
       {/* OVERLAY */}
-      {activeImage &&
+      {activeIndex !== null &&
         typeof window !== "undefined" &&
         createPortal(
           <div
-            className={`media-overlay ${closing ? "media-overlay-exit" : "media-overlay-enter"}`}
+            className={`media-overlay ${
+              closing ? "media-overlay-exit" : "media-overlay-enter"
+            }`}
             onClick={close}
           >
             {/* FRAME — NEVER MOVES */}
             <div className="media-overlay-frame">
-              {/* CONTENT — MOTION ONLY */}
+              {/* CONTENT — SWIPE TARGET */}
               <div
-                className="media-overlay-content swipeable"
+                key={activeIndex}
+                className={`media-overlay-content swipeable ${
+                  direction === "next"
+                    ? "swipe-next"
+                    : direction === "prev"
+                    ? "swipe-prev"
+                    : direction === "up"
+                    ? "swipe-up"
+                    : direction === "down"
+                    ? "swipe-down"
+                    : ""
+                }`}
                 onClick={(e) => e.stopPropagation()}
+                {...swipe}
               >
                 <img
-                  src={activeImage}
+                  src={COLLAGE_IMAGES[activeIndex]}
                   alt=""
                   className="media-overlay-image"
                 />
@@ -97,7 +129,6 @@ export default function CollageStack() {
           </div>,
           document.body
         )}
-
     </>
   );
 }
