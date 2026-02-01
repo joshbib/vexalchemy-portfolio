@@ -15,7 +15,7 @@ export default function FeaturedProject() {
         <div className="aspect-video bg-neutral-900 overflow-hidden">
           <MediaBlock
             type="video"
-            src="/projects/fluid-growth/fluid-growth.mp4"
+            src="https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/fluid-growth/fluid-growth.mp4"
             mode="poster"
           />
         </div>
