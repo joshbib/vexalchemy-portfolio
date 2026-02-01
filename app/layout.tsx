@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Vex Alchemy",
@@ -13,7 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        {children}
+        <Suspense fallback={null}>
+          {children}
+        </Suspense>
       </body>
     </html>
   );
