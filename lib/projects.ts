@@ -8,7 +8,11 @@ export const projects: Project[] = [
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
-    src: "https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/fluid%20growth/fluid-growth.mp4",
+
+    // ✅ Vercel Blob video URL
+    src: "https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/projects/Fluid-Growth/fluid-growth.mp4",
+
+    poster: "/projects/fluid-growth/fluid-growth-poster.png",
 
     mediaStack: [
       {
@@ -22,7 +26,7 @@ export const projects: Project[] = [
       },
       {
         type: "video",
-        src: "/projects/metamorph-studies/bts.mp4",
+        src: "https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/projects/Fluid-Growth/fluid-growth.mp4",
         poster: "/projects/metamorph-studies/bts-poster.jpg",
       },
     ],
