@@ -1,3 +1,5 @@
+"use client";
+
 let currentVideo: HTMLVideoElement | null = null;
 
 export function playExclusive(video: HTMLVideoElement) {
@@ -5,4 +7,10 @@ export function playExclusive(video: HTMLVideoElement) {
     currentVideo.pause();
   }
   currentVideo = video;
+}
+
+export function clearVideo(video: HTMLVideoElement) {
+  if (currentVideo === video) {
+    currentVideo = null;
+  }
 }

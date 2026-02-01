@@ -8,7 +8,7 @@ export const projects: Project[] = [
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
-    src: "/projects/fluid-growth/fluid-growth.mp4",
+    src: "/projects/fluid-growth/fluid-growth.webm",
     poster: "/projects/fluid-growth/fluid-growth-poster.png",
 
     mediaStack: [

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { playExclusive } from "@/lib/videoController";
+import { playExclusive, clearVideo } from "@/lib/videoController";
 
 type MediaBlockProps = {
   src: string;
@@ -15,13 +15,32 @@ export default function MediaBlock({
   mode = "poster",
 }: MediaBlockProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  /* --------------------------------
+     REGISTER VIDEO WITH CONTROLLER
+  --------------------------------- */
   useEffect(() => {
-  if (!videoRef.current) return;
-  videoRef.current.parentElement?.classList.add("sound-muted");
-}, []);
+    if (type !== "video" || !videoRef.current) return;
+
+    const video = videoRef.current;
+
+    const onPlay = () => playExclusive(video);
+    const onStop = () => clearVideo(video);
+
+    video.addEventListener("play", onPlay);
+    video.addEventListener("pause", onStop);
+    video.addEventListener("ended", onStop);
+
+    return () => {
+      onStop();
+      video.removeEventListener("play", onPlay);
+      video.removeEventListener("pause", onStop);
+      video.removeEventListener("ended", onStop);
+    };
+  }, [type]);
 
   /* -------------------------
-     GRID AUTOPLAY (ONLY)
+     GRID AUTOPLAY (POSTER)
   -------------------------- */
   useEffect(() => {
     if (type !== "video" || mode !== "poster" || !videoRef.current) return;
@@ -34,7 +53,6 @@ export default function MediaBlock({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          playExclusive(video);
           video.play().catch(() => {});
         } else {
           video.pause();
@@ -48,7 +66,7 @@ export default function MediaBlock({
   }, [type, mode]);
 
   /* -------------------------
-     HOMEPAGE / GRID MODE
+     POSTER MODE
   -------------------------- */
   if (mode === "poster") {
     if (type === "image") {
@@ -67,13 +85,14 @@ export default function MediaBlock({
         ref={videoRef}
         src={src}
         preload="none"
+        muted
         className="absolute inset-0 w-full h-full object-cover"
       />
     );
   }
 
   /* -------------------------
-     HERO MODE (USER CONTROL)
+     HERO MODE
   -------------------------- */
   if (type === "image") {
     return <img src={src} alt="" className="block max-w-full h-auto" />;
@@ -83,18 +102,14 @@ export default function MediaBlock({
     <div
       className="relative media-sound"
       onClick={() => {
-        if (!videoRef.current) return;
         const video = videoRef.current;
+        if (!video) return;
 
         if (video.muted) {
           video.muted = false;
           video.play().catch(() => {});
-          const wrapper = video.parentElement;
-          if (!wrapper) return;
-
-          wrapper.classList.add("sound-enabled");
-          wrapper.classList.remove("sound-muted");
-
+          video.parentElement?.classList.add("sound-enabled");
+          video.parentElement?.classList.remove("sound-muted");
         } else {
           video.paused ? video.play() : video.pause();
         }
@@ -112,9 +127,9 @@ export default function MediaBlock({
       />
 
       <span className="sound-hint">
-      <span className="sound-icon" aria-hidden />
-      <span className="sound-text">Enable sound</span>
-    </span>
+        <span className="sound-icon" aria-hidden />
+        <span className="sound-text">Enable sound</span>
+      </span>
     </div>
   );
 }
