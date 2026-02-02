@@ -58,7 +58,7 @@ export default function MediaBlock({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          video.play().catch(() => { });
         } else {
           video.pause();
         }
@@ -114,11 +114,17 @@ export default function MediaBlock({
         if (!video) return;
 
         if (video.muted) {
+          // First click: unmute and play
           video.muted = false;
-          video.play().catch(() => {});
+          video.play().catch(() => { });
           video.parentElement?.classList.add("sound-enabled");
         } else {
-          video.paused ? video.play() : video.pause();
+          // Subsequent clicks: toggle play/pause
+          if (video.paused) {
+            video.play().catch(() => { });
+          } else {
+            video.pause();
+          }
         }
       }}
     >
@@ -130,7 +136,7 @@ export default function MediaBlock({
         loop
         playsInline
         preload="auto"
-        className="block max-w-full h-auto cursor-pointer select-none"
+        className="block max-w-full max-h-[50vh] h-auto w-auto cursor-pointer select-none"
         style={{ touchAction: "pan-y" }} // keep vertical scroll
         onTouchStart={(e) => {
           const video = videoRef.current;
@@ -164,7 +170,7 @@ export default function MediaBlock({
           if (!video) return;
 
           if (wasPlaying.current) {
-            video.play().catch(() => {});
+            video.play().catch(() => { });
           }
         }}
       />

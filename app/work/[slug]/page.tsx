@@ -1,10 +1,9 @@
-// app/work/[slug]/page.tsx - ENHANCED VERSION
+// app/work/[slug]/page.tsx - PREMIUM REFINED VERSION
 import { projects } from "@/lib/projects";
 import PageFade from "@/components/PageFade";
 import ProjectSwipeShell from "@/components/ProjectSwipeShell";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectHero from "@/components/ProjectHero";
-import ProjectMediaStack from "@/components/ProjectMediaStack";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -54,14 +53,14 @@ export default async function ProjectPage({ params }: PageProps) {
         nextHref={nextProject ? `/work/${nextProject.slug}?dir=next` : undefined}
       >
         <main className="min-h-screen">
-          {/* BACK */}
-          <div className="px-6 md:px-16 pt-12">
+          {/* BACK LINK - Refined positioning */}
+          <div className="px-6 md:px-16 pt-10 md:pt-12">
             <Link
               href="/"
               className="
-                inline-flex items-center gap-2
-                text-sm text-neutral-500
-                hover:text-black
+                inline-flex items-center gap-2.5
+                text-[13px] text-neutral-400
+                hover:text-neutral-900
                 transition-all duration-300
                 group
               "
@@ -69,19 +68,12 @@ export default async function ProjectPage({ params }: PageProps) {
               <span className="transition-transform duration-300 group-hover:-translate-x-1">
                 ←
               </span>
-              Back to work
+              <span className="tracking-wide">Back to work</span>
             </Link>
           </div>
 
-          {/* HERO */}
-          <ProjectHero
-            slug={project.slug}
-            mediaType={project.mediaType}
-            src={project.src}
-          />
-
-          {/* HEADER */}
-          <section className="px-6 md:px-16 pb-20">
+          {/* HEADER - Left aligned, elegant hierarchy */}
+          <section className="px-6 md:px-16 pt-8 md:pt-12 pb-16 md:pb-20">
             <ProjectHeader
               title={project.title}
               year={project.year}
@@ -89,29 +81,47 @@ export default async function ProjectPage({ params }: PageProps) {
             />
           </section>
 
-          {/* MEDIA STACK */}
-          {project.mediaStack && (
-            <ProjectMediaStack media={project.mediaStack} />
-          )}
+          {/* HERO VIDEO */}
+          <ProjectHero
+            slug={project.slug}
+            mediaType={project.mediaType}
+            src={project.src}
+          />
 
-          {/* NAVIGATION */}
-          <nav className="px-6 md:px-16 pb-32 pt-20 flex items-center justify-between border-t border-black/10">
+          {/* Spacer before navigation */}
+          <div className="pb-16 md:pb-24" />
+
+          {/* NAVIGATION - Refined layout */}
+          <nav className="
+            px-6 md:px-16 
+            pb-24 md:pb-32 
+            pt-24 md:pt-32
+            flex items-center justify-between 
+            border-t border-black/[0.06]
+          ">
             <div className="flex-1">
               {prevProject ? (
                 <Link
                   href={`/work/${prevProject.slug}?dir=prev`}
-                  className="project-nav-link project-nav-prev group inline-block"
+                  className="project-nav-link group inline-block"
                 >
-                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
                     Previous
                   </span>
-                  <span className="text-lg md:text-xl font-medium text-neutral-700 group-hover:text-black">
+                  <span className="
+                    text-lg md:text-xl 
+                    font-light 
+                    text-neutral-700 
+                    group-hover:text-black
+                    transition-colors
+                    duration-300
+                  ">
                     {prevProject.title}
                   </span>
                 </Link>
               ) : (
-                <div className="opacity-30">
-                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                <div className="opacity-20">
+                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
                     Previous
                   </span>
                   <span className="text-lg text-neutral-300">—</span>
@@ -121,7 +131,15 @@ export default async function ProjectPage({ params }: PageProps) {
 
             <Link
               href="/"
-              className="text-[11px] tracking-wider uppercase text-neutral-500 hover:text-black transition-colors"
+              className="
+                text-[10px] 
+                tracking-[0.25em] 
+                uppercase 
+                text-neutral-400 
+                hover:text-neutral-900 
+                transition-colors
+                duration-300
+              "
             >
               All Projects
             </Link>
@@ -130,18 +148,25 @@ export default async function ProjectPage({ params }: PageProps) {
               {nextProject ? (
                 <Link
                   href={`/work/${nextProject.slug}?dir=next`}
-                  className="project-nav-link project-nav-next group inline-block"
+                  className="project-nav-link group inline-block"
                 >
-                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
                     Next
                   </span>
-                  <span className="text-lg md:text-xl font-medium text-neutral-700 group-hover:text-black">
+                  <span className="
+                    text-lg md:text-xl 
+                    font-light 
+                    text-neutral-700 
+                    group-hover:text-black
+                    transition-colors
+                    duration-300
+                  ">
                     {nextProject.title}
                   </span>
                 </Link>
               ) : (
-                <div className="opacity-30">
-                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                <div className="opacity-20">
+                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
                     Next
                   </span>
                   <span className="text-lg text-neutral-300">—</span>

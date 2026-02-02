@@ -9,23 +9,29 @@ export const projects: Project[] = [
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
 
-    // ✅ Vercel Blob video URL
-    src: "https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/projects/Fluid-Growth/fluid-growth.mp4",
+    // Hero video - place in: public/projects/fluid-growth/fluid_growth.mp4
+    src: "/projects/fluid-growth/fluid_growth.mp4",
 
     mediaStack: [
       {
         type: "image",
-        src: "/projects/metamorph-studies/frame-01.jpg",
-        alt: "Metamorph study still frame",
+        src: "/projects/fluid-growth/frame-01.jpg",
+        alt: "Fluid growth process frame 1",
       },
       {
         type: "image",
-        src: "/projects/metamorph-studies/frame-02.jpg",
+        src: "/projects/fluid-growth/frame-02.jpg",
+        alt: "Fluid growth process frame 2",
+      },
+      {
+        type: "image",
+        src: "/projects/fluid-growth/frame-03.jpg",
+        alt: "Fluid growth process frame 3",
       },
       {
         type: "video",
-        src: "https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/projects/Fluid-Growth/fluid-growth.mp4",
-        poster: "/projects/metamorph-studies/bts-poster.jpg",
+        src: "/projects/fluid-growth/process.mp4",
+        poster: "/projects/fluid-growth/process-poster.jpg",
       },
     ],
   },
@@ -36,8 +42,21 @@ export const projects: Project[] = [
     description:
       "Artifacts generated through rule-based systems and controlled noise.",
     mediaType: "video",
-    src: "/videos/sample1.mp4",
-    poster: "/images/sample1.png",
+    src: "/projects/procedural-relics/hero.mp4",
+    poster: "/projects/procedural-relics/poster.jpg",
+
+    mediaStack: [
+      {
+        type: "image",
+        src: "/projects/procedural-relics/detail-01.jpg",
+        alt: "Procedural relic detail",
+      },
+      {
+        type: "image",
+        src: "/projects/procedural-relics/detail-02.jpg",
+        alt: "Procedural relic detail",
+      },
+    ],
   },
   {
     slug: "fluid-rituals",
@@ -46,7 +65,47 @@ export const projects: Project[] = [
     description:
       "High-resolution fluid simulations exploring tension, release, and form.",
     mediaType: "video",
-    src: "/videos/fluid-rituals.mp4",
-    poster: "/images/fluid-rituals.png",
+    src: "/projects/fluid-rituals/hero.mp4",
+    poster: "/projects/fluid-rituals/poster.jpg",
+
+    mediaStack: [
+      {
+        type: "video",
+        src: "/projects/fluid-rituals/sequence-01.mp4",
+        poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
+      },
+      {
+        type: "image",
+        src: "/projects/fluid-rituals/still-01.jpg",
+        alt: "Fluid ritual still frame",
+      },
+    ],
   },
 ];
+
+/* 
+  📁 RECOMMENDED FILE STRUCTURE:
+  
+  public/
+    projects/
+      fluid-growth/
+        fluid-growth.mp4       (hero video)
+        frame-01.jpg
+        frame-02.jpg
+        frame-03.jpg
+        process.mp4
+        process-poster.jpg
+      
+      procedural-relics/
+        hero.mp4
+        poster.jpg
+        detail-01.jpg
+        detail-02.jpg
+      
+      fluid-rituals/
+        hero.mp4
+        poster.jpg
+        sequence-01.mp4
+        sequence-01-poster.jpg
+        still-01.jpg
+*/

@@ -21,26 +21,31 @@ export default function ProjectHero({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{
-        duration: prefersReducedMotion ? 0 : 0.28,
-        ease: "easeOut",
+        duration: prefersReducedMotion ? 0 : 0.32,
+        ease: [0.16, 1, 0.3, 1], // Premium ease curve
       }}
       className="
         w-full
         flex
         flex-col
         items-center
+        justify-center
         pt-16
-        pb-20
+        pb-16
+        md:pt-20
+        md:pb-20
       "
     >
-      {/* MEDIA — size NEVER animates */}
+      {/* CENTERED HERO MEDIA - Minimal responsive sizing */}
       <div
         className="
           w-full
-          max-w-[520px]
-          max-h-[55vh]
+          px-6
+          md:px-16
+          max-w-[800px]
           flex
           justify-center
+          items-center
         "
       >
         <MediaBlock
@@ -50,7 +55,8 @@ export default function ProjectHero({
         />
       </div>
 
-      <div className="mt-16 w-16 h-px bg-black/10" />
+      {/* Elegant divider */}
+      <div className="mt-16 md:mt-20 w-20 h-[1.5px] bg-gradient-to-r from-transparent via-black/15 to-transparent" />
     </motion.section>
   );
 }

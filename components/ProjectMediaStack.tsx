@@ -8,38 +8,87 @@ export default function ProjectMediaStack({ media }: Props) {
   if (!media || media.length === 0) return null;
 
   return (
-    <section className="collage-section px-6 md:px-16 pb-40">
+    <section className="px-6 md:px-16 pb-32 md:pb-40">
       <div
         className="
-          collage
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          lg:grid-cols-3
           gap-6
-          columns-1
-          md:columns-2
-          lg:columns-3
+          md:gap-8
+          lg:gap-10
         "
       >
         {media.map((item, index) => {
           if (item.type === "image") {
             return (
-              <img
+              <div
                 key={index}
-                src={item.src}
-                alt={item.alt || ""}
-                className="collage-item"
-                loading="lazy"
-              />
+                className="
+                  group
+                  relative
+                  overflow-hidden
+                  bg-neutral-50
+                  aspect-[4/5]
+                "
+              >
+                <img
+                  src={item.src}
+                  alt={item.alt || ""}
+                  className="
+                    w-full
+                    h-full
+                    object-cover
+                    transition-transform
+                    duration-700
+                    ease-out
+                    group-hover:scale-[1.02]
+                  "
+                  loading="lazy"
+                />
+                {item.caption && (
+                  <div className="
+                    absolute
+                    bottom-0
+                    left-0
+                    right-0
+                    p-4
+                    bg-gradient-to-t
+                    from-black/40
+                    to-transparent
+                  ">
+                    <p className="text-xs text-white/90 tracking-wide">
+                      {item.caption}
+                    </p>
+                  </div>
+                )}
+              </div>
             );
           }
 
           return (
-            <video
+            <div
               key={index}
-              src={item.src}
-              poster={item.poster}
-              controls
-              preload="metadata"
-              className="collage-item"
-            />
+              className="
+                relative
+                overflow-hidden
+                bg-neutral-900
+                aspect-video
+              "
+            >
+              <video
+                src={item.src}
+                poster={item.poster}
+                controls
+                preload="metadata"
+                className="
+                  w-full
+                  h-full
+                  object-cover
+                "
+              />
+            </div>
           );
         })}
       </div>

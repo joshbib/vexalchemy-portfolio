@@ -86,10 +86,10 @@ export default function Home() {
         {/* COLLAGE */}
         <CollageStack />
 
+
         {/* FOOTER */}
         <footer className="px-6 md:px-16 py-20 border-t border-black/10">
           <div className="flex flex-col md:flex-row justify-between gap-12">
-            
             <div>
               <p className="text-meta-strong mb-4">Vex Alchemy</p>
               <p className="text-sm text-neutral-500 max-w-md leading-relaxed">
@@ -98,22 +98,23 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col gap-4 text-sm">
-              <a
+              <a 
                 href="mailto:joshibibekraj@gmail.com"
                 className="text-neutral-600 hover:text-black transition-colors"
               >
                 joshibibekraj@gmail.com
               </a>
-
+              
+              {/* Add your social links */}
               <div className="flex gap-6 text-neutral-500 mt-2">
-                <a href="#" className="hover:text-black">Instagram</a>
-                <a href="#" className="hover:text-black">Twitter</a>
-                <a href="#" className="hover:text-black">Vimeo</a>
+                <a href="#" className="hover:text-black transition-colors">Instagram</a>
+                <a href="#" className="hover:text-black transition-colors">Twitter</a>
+                <a href="#" className="hover:text-black transition-colors">Vimeo</a>
               </div>
             </div>
           </div>
 
-          <div className="mt-16 pt-8 border-t border-black/5 flex justify-between text-[11px] text-neutral-400 tracking-wide">
+          <div className="mt-16 pt-8 border-t border-black/5 flex justify-between items-center text-[11px] text-neutral-400 tracking-wide">
             <span>© {new Date().getFullYear()} Vex Alchemy</span>
             <span>Built with restraint & precision</span>
           </div>
