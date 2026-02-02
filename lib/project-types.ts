@@ -1,16 +1,14 @@
+// lib/project-types.ts - ENHANCED
 export type MediaType = "video" | "image";
-
 export type ProjectStatus = "live" | "draft" | "archived";
+export type ProjectCategory = "simulation" | "procedural" | "motion" | "experimental";
 
-/**
- * Additional media items shown
- * AFTER the main project video/image
- */
 export type ProjectMediaItem = {
   type: MediaType;
   src: string;
   poster?: string;
   alt?: string;
+  caption?: string; // Add captions for context
 };
 
 export type Project = {
@@ -18,15 +16,26 @@ export type Project = {
   title: string;
   year: string;
   description: string;
-
-  // Primary / hero media
+  category?: ProjectCategory; // Add categories
+  tags?: string[]; // Add tags for filtering
+  
+  // Primary media
   mediaType: MediaType;
   src: string;
   poster?: string;
-
-  // Optional extended media section
+  
+  // Extended media
   mediaStack?: ProjectMediaItem[];
-
-  // CMS / publishing control
+  
+  // Publishing
   status?: ProjectStatus;
+  publishedAt?: string; // ISO date string
+  updatedAt?: string;
+  
+  // SEO
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+  };
 };

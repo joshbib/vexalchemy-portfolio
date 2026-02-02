@@ -752,3 +752,188 @@ video {
     display: none;
   }
 }
+/* -------------------------
+   PREMIUM ENHANCEMENTS
+-------------------------- */
+
+/* Subtle grain texture */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
+
+/* Scroll indicator animations */
+@keyframes fade-in-delayed {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scroll-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scaleY(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.animate-fade-in-delayed {
+  animation: fade-in-delayed 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+.animate-scroll-pulse {
+  animation: scroll-pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+/* Enhanced nav link states */
+.nav-link {
+  position: relative;
+  padding-bottom: 2px;
+  cursor: pointer;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Refined project grid spacing */
+.project-card {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) {
+  .project-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Better collage item interaction */
+.collage-item {
+  transition: 
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+@media (hover: hover) {
+  .collage-item:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.08),
+      0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Smooth section transitions */
+section {
+  transition: opacity 0.6s ease-out;
+}
+
+/* Typography micro-adjustments */
+h1 {
+  text-wrap: balance;
+}
+
+/* Better reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-fade-in-delayed,
+  .animate-scroll-pulse {
+    animation: none;
+    opacity: 0.3;
+  }
+}
+/* -------------------------
+   SCROLL ANIMATIONS (MISSING)
+-------------------------- */
+
+@keyframes fade-in-delayed {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scroll-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scaleY(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.animate-fade-in-delayed {
+  animation: fade-in-delayed 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+.animate-scroll-pulse {
+  animation: scroll-pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+/* -------------------------
+   GRAIN TEXTURE (MISSING)
+-------------------------- */
+
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
+
+/* -------------------------
+   TEXT-META (MISSING)
+-------------------------- */
+
+.text-meta {
+  font-size: 0.875rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}

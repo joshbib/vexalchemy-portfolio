@@ -1,9 +1,43 @@
+// app/layout.tsx - COMPLETE
 import "./globals.css";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Vex Alchemy",
-  description: "Procedural CGI & Motion Design",
+export const metadata: Metadata = {
+  title: {
+    default: "Vex Alchemy — Procedural CGI & Motion Design",
+    template: "%s | Vex Alchemy",
+  },
+  description: "Design-led digital experiences built with restraint and precision. Procedural CGI practice focused on systems-driven motion and form.",
+  keywords: ["procedural", "CGI", "motion design", "Houdini", "3D", "simulation", "visual effects"],
+  authors: [{ name: "Vex Alchemy" }],
+  creator: "Vex Alchemy",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://vexalchemy.com",
+    siteName: "Vex Alchemy",
+    title: "Vex Alchemy — Procedural CGI & Motion Design",
+    description: "Design-led digital experiences built with restraint and precision.",
+    images: [
+      {
+        url: "/og-image.png", // Create this image: 1200x630px
+        width: 1200,
+        height: 630,
+        alt: "Vex Alchemy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vex Alchemy — Procedural CGI & Motion Design",
+    description: "Design-led digital experiences built with restraint and precision.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -13,6 +47,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body suppressHydrationWarning>
         <Suspense fallback={null}>
           {children}

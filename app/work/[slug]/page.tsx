@@ -1,14 +1,40 @@
+// app/work/[slug]/page.tsx - ENHANCED VERSION
 import { projects } from "@/lib/projects";
 import PageFade from "@/components/PageFade";
 import ProjectSwipeShell from "@/components/ProjectSwipeShell";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectHero from "@/components/ProjectHero";
+import ProjectMediaStack from "@/components/ProjectMediaStack";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+// Generate static params for all projects
+export async function generateStaticParams() {
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
+// Generate metadata for each project
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const project = projects.find((p) => p.slug === slug);
+
+  if (!project) {
+    return {
+      title: "Project Not Found",
+    };
+  }
+
+  return {
+    title: `${project.title} | Vex Alchemy`,
+    description: project.description,
+  };
+}
 
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
@@ -17,16 +43,15 @@ export default async function ProjectPage({ params }: PageProps) {
   if (index === -1) notFound();
 
   const project = projects[index];
-  const total = projects.length;
 
-  const prevProject = projects[(index - 1 + total) % total];
-  const nextProject = projects[(index + 1) % total];
+  const prevProject = index > 0 ? projects[index - 1] : null;
+  const nextProject = index < projects.length - 1 ? projects[index + 1] : null;
 
   return (
     <PageFade>
       <ProjectSwipeShell
-        prevHref={`/work/${prevProject.slug}?dir=prev`}
-        nextHref={`/work/${nextProject.slug}?dir=next`}
+        prevHref={prevProject ? `/work/${prevProject.slug}?dir=prev` : undefined}
+        nextHref={nextProject ? `/work/${nextProject.slug}?dir=next` : undefined}
       >
         <main className="min-h-screen">
           {/* BACK */}
@@ -34,29 +59,29 @@ export default async function ProjectPage({ params }: PageProps) {
             <Link
               href="/"
               className="
-                inline-flex
-                items-center
-                gap-2
-                text-sm
-                text-gray-500
-                transition-all
-                duration-300
-                ease-out
+                inline-flex items-center gap-2
+                text-sm text-neutral-500
                 hover:text-black
+                transition-all duration-300
                 group
               "
             >
-              <span className="transition-transform duration-300 ease-out group-hover:-translate-x-3">
+              <span className="transition-transform duration-300 group-hover:-translate-x-1">
                 ←
               </span>
-              <span className="transition-transform duration-300 ease-out group-hover:-translate-x-1">
-                Back to work
-              </span>
+              Back to work
             </Link>
           </div>
 
+          {/* HERO */}
+          <ProjectHero
+            slug={project.slug}
+            mediaType={project.mediaType}
+            src={project.src}
+          />
+
           {/* HEADER */}
-          <section className="px-6 md:px-16 pt-24 pb-20">
+          <section className="px-6 md:px-16 pb-20">
             <ProjectHeader
               title={project.title}
               year={project.year}
@@ -64,35 +89,66 @@ export default async function ProjectPage({ params }: PageProps) {
             />
           </section>
 
-          {/* HERO */}
-          <section className="px-6 md:px-16 pb-32">
-            <div className="flex justify-center">
-              <ProjectHero
-                slug={project.slug}
-                mediaType={project.mediaType}
-                src={project.src}
-              />
-            </div>
-          </section>
+          {/* MEDIA STACK */}
+          {project.mediaStack && (
+            <ProjectMediaStack media={project.mediaStack} />
+          )}
 
-          {/* PREV / NEXT (desktop) */}
-          <section className="px-6 md:px-16 pb-40">
-            <div className="flex justify-between max-w-5xl mx-auto text-sm">
-              <Link
-                href={`/work/${prevProject.slug}?dir=prev`}
-                className="text-gray-500 hover:text-black hover:-translate-x-3 transition"
-              >
-                ← {prevProject.title}
-              </Link>
-
-              <Link
-                href={`/work/${nextProject.slug}?dir=next`}
-                className="text-gray-500 hover:text-black hover:translate-x-3 transition text-right"
-              >
-                {nextProject.title} →
-              </Link>
+          {/* NAVIGATION */}
+          <nav className="px-6 md:px-16 pb-32 pt-20 flex items-center justify-between border-t border-black/10">
+            <div className="flex-1">
+              {prevProject ? (
+                <Link
+                  href={`/work/${prevProject.slug}?dir=prev`}
+                  className="project-nav-link project-nav-prev group inline-block"
+                >
+                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                    Previous
+                  </span>
+                  <span className="text-lg md:text-xl font-medium text-neutral-700 group-hover:text-black">
+                    {prevProject.title}
+                  </span>
+                </Link>
+              ) : (
+                <div className="opacity-30">
+                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                    Previous
+                  </span>
+                  <span className="text-lg text-neutral-300">—</span>
+                </div>
+              )}
             </div>
-          </section>
+
+            <Link
+              href="/"
+              className="text-[11px] tracking-wider uppercase text-neutral-500 hover:text-black transition-colors"
+            >
+              All Projects
+            </Link>
+
+            <div className="flex-1 text-right">
+              {nextProject ? (
+                <Link
+                  href={`/work/${nextProject.slug}?dir=next`}
+                  className="project-nav-link project-nav-next group inline-block"
+                >
+                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                    Next
+                  </span>
+                  <span className="text-lg md:text-xl font-medium text-neutral-700 group-hover:text-black">
+                    {nextProject.title}
+                  </span>
+                </Link>
+              ) : (
+                <div className="opacity-30">
+                  <span className="text-[11px] tracking-wider uppercase text-neutral-400 block mb-2">
+                    Next
+                  </span>
+                  <span className="text-lg text-neutral-300">—</span>
+                </div>
+              )}
+            </div>
+          </nav>
         </main>
       </ProjectSwipeShell>
     </PageFade>

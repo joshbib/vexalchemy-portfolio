@@ -12,8 +12,6 @@ export const projects: Project[] = [
     // ✅ Vercel Blob video URL
     src: "https://fj8ihfcthaje7zo0.public.blob.vercel-storage.com/projects/Fluid-Growth/fluid-growth.mp4",
 
-    poster: "/projects/fluid-growth/fluid-growth-poster.png",
-
     mediaStack: [
       {
         type: "image",

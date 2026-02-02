@@ -1,3 +1,4 @@
+// components/ProjectStack.tsx - COMPLETE VERSION
 "use client";
 
 import MediaBlock from "@/components/MediaBlock";
@@ -13,22 +14,9 @@ export default function ProjectStack() {
           href={`/work/${project.slug}`}
           className="group block"
         >
-          <article
-            className="
-              px-6 md:px-16
-              py-[12vh]
-              border-t border-black/10
-              bg-black/[0.015]
-            "
-          >
+          <article className="px-6 md:px-16 py-[12vh] border-t border-black/10 bg-black/[0.015]">
             {/* META */}
-            <div
-              className="
-                max-w-4xl mb-[6vh]
-                transition-transform duration-500 ease-out
-                group-hover:-translate-x-1
-              "
-            >
+            <div className="max-w-4xl mb-[6vh] transition-transform duration-500 ease-out group-hover:-translate-x-1">
               <h2 className="text-2xl md:text-4xl font-medium mb-1">
                 {project.title}
               </h2>
@@ -40,9 +28,8 @@ export default function ProjectStack() {
             {/* MEDIA */}
             <div className="px-0 md:px-16">
               <div
-                className="relative aspect-video overflow-hidden group project-card"
+                className="relative aspect-video overflow-hidden group project-card bg-neutral-100"
                 onClick={(e) => {
-                  // Mobile tap handling
                   if (window.matchMedia("(hover: none)").matches) {
                     const card = e.currentTarget;
                     if (!card.classList.contains("is-active")) {
@@ -53,25 +40,25 @@ export default function ProjectStack() {
                   }
                 }}
               >
-                {/* MEDIA */}
-                <MediaBlock
-                  type={project.mediaType}
-                  src={project.src}
-                  mode="poster"
-                />
+                {/* MEDIA with refined transition */}
+                <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
+                  <MediaBlock
+                    type={project.mediaType}
+                    src={project.src}
+                    mode="poster"
+                  />
+                </div>
 
-                {/* OVERLAY */}
+                {/* OVERLAY - COMPLETE */}
                 <div className="project-hover-overlay">
                   <h3 className="project-hover-title">
                     {project.title}
                   </h3>
-
                   <span className="project-hover-action">
                     View Project
                   </span>
                 </div>
               </div>
-
             </div>
           </article>
         </Link>
