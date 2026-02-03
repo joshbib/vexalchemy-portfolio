@@ -1,7 +1,8 @@
-// app/layout.tsx - COMPLETE
+// app/layout.tsx - COMPLETE WITH FULLSCREEN DOT GRID
 import "./globals.css";
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import SphericalDotGrid from "@/components/three/SphericalDotGrid";
 
 export const metadata: Metadata = {
   title: {
@@ -51,9 +52,17 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body suppressHydrationWarning>
-        <Suspense fallback={null}>
-          {children}
-        </Suspense>
+        {/* Fixed fullscreen dot grid background */}
+        <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+          <SphericalDotGrid className="w-full h-full" />
+        </div>
+
+        {/* Main content - positioned above the background */}
+        <div className="relative z-10">
+          <Suspense fallback={null}>
+            {children}
+          </Suspense>
+        </div>
       </body>
     </html>
   );
