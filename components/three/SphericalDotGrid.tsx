@@ -66,7 +66,7 @@ const vertexShader = `
     pos.z += idleWave * 0.08 * uIdleAnimation;
 
     // Adaptive alpha for sphere fade
-    vAlpha = influence * 0.4 + 0.6;
+    vAlpha = mix(0.45, 1.0, influence);
     
     // Edge glow
     float edgeGlow = smoothstep(uRadius - uFeather * 0.4, uRadius - uFeather, dist);
@@ -76,7 +76,7 @@ const vertexShader = `
     gl_Position = projectionMatrix * mvPosition;
 
     // Fixed point size (no scaling animation)
-    gl_PointSize = 4.4;
+    gl_PointSize = 4.0;
   }
 `;
 
@@ -96,7 +96,7 @@ const fragmentShader = `
     if (dist > 0.5) discard;
 
     // Smoother anti-aliased edges
-    float alpha = smoothstep(0.5, 0.2, dist) * vAlpha;
+    float alpha = smoothstep(0.5, 0.2, dist) * vAlpha * 0.95;
     
     // Color transition on interaction
     vec3 color = mix(uColorInactive, uColorActive, vInfluence * 0.6);
@@ -125,8 +125,8 @@ function DotGridPoints() {
   const interactionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const geometry = useMemo(() => {
-    const gridSize = 100; // Dense grid
-    const spacing = 0.7;
+    const gridSize = 120; // Denser field for full coverage
+    const spacing = 0.6;
     const positions = new Float32Array(gridSize * gridSize * 3);
     let index = 0;
 
@@ -154,7 +154,7 @@ function DotGridPoints() {
           uIntensity: { value: 0.12 },
           uTime: { value: 0 },
           uIdleAnimation: { value: 1 },
-          uColorInactive: { value: new THREE.Color(0.18, 0.17, 0.16) },
+          uColorInactive: { value: new THREE.Color(0.2, 0.19, 0.18) },
           uColorActive: { value: new THREE.Color(0.28, 0.27, 0.25) },
         },
         vertexShader,

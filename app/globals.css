@@ -68,6 +68,59 @@ h1 {
   text-wrap: balance;
 }
 
+main > section:first-of-type::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(
+      70% 55% at 22% 30%,
+      rgba(247, 247, 245, 0.78),
+      rgba(247, 247, 245, 0.0) 75%
+    );
+}
+
+main > section:first-of-type {
+  padding-top: 5rem;
+  padding-bottom: 6rem;
+}
+
+main > section:first-of-type h1 {
+  font-size: 2.5rem;
+  line-height: 1.08;
+}
+
+main > section:first-of-type p {
+  max-width: 34ch;
+}
+
+@media (min-width: 768px) {
+  main > section:first-of-type {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  main > section:first-of-type h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 0.98;
+  }
+
+  main > section:first-of-type p {
+    max-width: 60ch;
+  }
+
+  main > section:first-of-type::before {
+    background:
+      radial-gradient(
+        60% 45% at 22% 32%,
+        rgba(247, 247, 245, 0.6),
+        rgba(247, 247, 245, 0.0) 70%
+      );
+  }
+}
+
 p {
   max-width: 60ch;
   color: var(--muted);
@@ -415,7 +468,8 @@ section {
 -------------------------- */
 
 .collage-section {
-  background: var(--background);
+  background: transparent;
+  background-color: transparent;
 }
 
 /* Masonry base — THIS WAS MISSING */
