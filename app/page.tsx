@@ -1,6 +1,7 @@
 import ProjectStack from "@/components/ProjectStack";
 import CollageStack from "@/components/CollageStack";
 import PageFade from "@/components/PageFade";
+import AvailabilityStatus from "@/components/AvailabilityStatus";
 import Link from "next/link";
 
 export default function Home() {
@@ -16,19 +17,11 @@ export default function Home() {
         </div>
 
          {/* Availability status */}
-        <div className="absolute top-8 right-6 md:right-16 flex items-center gap-2 z-20">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-[11px] tracking-wide text-neutral-500">
-            Available for work
-          </span>
-        </div>
+        <AvailabilityStatus />
 
         <div className="w-full flex flex-col md:flex-row md:items-start md:justify-between relative z-10">
           {/* LEFT */}
-          <div className="max-w-5xl">
+          <div className="max-w-5xl hero-text">
             {/* Meta - refined spacing */}
             <span className="text-meta-strong block mb-8 opacity-60">
               Vex Alchemy

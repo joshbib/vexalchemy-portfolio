@@ -103,13 +103,13 @@ export default async function ProjectPage({ params }: PageProps) {
               {prevProject ? (
                 <Link
                   href={`/work/${prevProject.slug}?dir=prev`}
-                  className="project-nav-link group inline-block"
+                  className="project-nav-link group inline-block max-w-[140px] md:max-w-none"
                 >
-                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
+                  <span className="text-[9px] md:text-[10px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-neutral-400 block mb-2 md:mb-3">
                     Previous
                   </span>
                   <span className="
-                    text-lg md:text-xl 
+                    text-[10px] sm:text-[11px] md:text-xl 
                     font-light 
                     text-neutral-700 
                     group-hover:text-black
@@ -120,11 +120,11 @@ export default async function ProjectPage({ params }: PageProps) {
                   </span>
                 </Link>
               ) : (
-                <div className="opacity-20">
-                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
+                <div className="opacity-20 max-w-[140px] md:max-w-none">
+                  <span className="text-[9px] md:text-[10px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-neutral-400 block mb-2 md:mb-3">
                     Previous
                   </span>
-                  <span className="text-lg text-neutral-300">—</span>
+                  <span className="text-[10px] sm:text-[11px] md:text-xl text-neutral-300">—</span>
                 </div>
               )}
             </div>
@@ -132,8 +132,8 @@ export default async function ProjectPage({ params }: PageProps) {
             <Link
               href="/"
               className="
-                text-[10px] 
-                tracking-[0.25em] 
+                text-[9px] md:text-[10px] 
+                tracking-[0.15em] md:tracking-[0.25em] 
                 uppercase 
                 text-neutral-400 
                 hover:text-neutral-900 
@@ -148,13 +148,13 @@ export default async function ProjectPage({ params }: PageProps) {
               {nextProject ? (
                 <Link
                   href={`/work/${nextProject.slug}?dir=next`}
-                  className="project-nav-link group inline-block"
+                  className="project-nav-link group inline-block max-w-[140px] md:max-w-none"
                 >
-                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
+                  <span className="text-[9px] md:text-[10px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-neutral-400 block mb-2 md:mb-3">
                     Next
                   </span>
                   <span className="
-                    text-lg md:text-xl 
+                    text-[10px] sm:text-[11px] md:text-xl 
                     font-light 
                     text-neutral-700 
                     group-hover:text-black
@@ -165,11 +165,11 @@ export default async function ProjectPage({ params }: PageProps) {
                   </span>
                 </Link>
               ) : (
-                <div className="opacity-20">
-                  <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-400 block mb-3">
+                <div className="opacity-20 max-w-[140px] md:max-w-none">
+                  <span className="text-[9px] md:text-[10px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-neutral-400 block mb-2 md:mb-3">
                     Next
                   </span>
-                  <span className="text-lg text-neutral-300">—</span>
+                  <span className="text-[10px] sm:text-[11px] md:text-xl text-neutral-300">—</span>
                 </div>
               )}
             </div>
