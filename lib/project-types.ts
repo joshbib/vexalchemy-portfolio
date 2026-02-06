@@ -11,6 +11,26 @@ export type ProjectMediaItem = {
   caption?: string; // Add captions for context
 };
 
+// Individual media item for editorial layouts
+export type MediaItem = {
+  type: MediaType;
+  src: string;
+  poster?: string;
+  alt?: string;
+  caption?: string;
+};
+
+// Layout block types
+export type LayoutBlock =
+  | { layout: "full"; media: MediaItem }
+  | { layout: "two-up"; media: [MediaItem, MediaItem] }
+  | { layout: "three-up"; media: [MediaItem, MediaItem, MediaItem] }
+  | { layout: "left-heavy"; media: [MediaItem, MediaItem] }
+  | { layout: "right-heavy"; media: [MediaItem, MediaItem] }
+  | { layout: "vertical-stack"; media: MediaItem[] }
+  | { layout: "offset-duo"; media: [MediaItem, MediaItem] }
+  | { layout: "caption-hero"; media: MediaItem; caption: string; large?: boolean };
+
 export type Project = {
   slug: string;
   title: string;
@@ -26,6 +46,9 @@ export type Project = {
   
   // Extended media
   mediaStack?: ProjectMediaItem[];
+  
+  // NEW: Art-directed layout blocks
+  editorial?: LayoutBlock[];
   
   // Publishing
   status?: ProjectStatus;

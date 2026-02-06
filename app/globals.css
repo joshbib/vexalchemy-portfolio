@@ -859,3 +859,20 @@ section {
 .collage-item {
   margin-bottom: 1.5rem;
 }
+
+/* -------------------------
+   EDITORIAL LAYOUT SYSTEM
+-------------------------- */
+
+.editorial-layout {
+  width: 100%;
+}
+
+/* Aspect ratio utilities for consistent media boxes */
+.aspect-\[21\/9\] {
+  aspect-ratio: 21 / 9;
+}
+
+.aspect-\[16\/10\] {
+  aspect-ratio: 16 / 10;
+}

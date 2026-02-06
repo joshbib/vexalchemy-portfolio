@@ -58,25 +58,65 @@ export const projects: Project[] = [
     mediaStack: [
       {
         type: "video",
-        src: "/projects/watch-landscape/hero.mp4",
+        src: "https://bibekjoshi.com/Grain/Compare_1.mp4",
         poster: "/projects/watch-landscape/poster.jpg",
         alt: "Watch landscape hero sequence",
       },
+
       {
-        type: "image",
-        src: "/projects/watch-landscape/detail-01.jpg",
-        alt: "Watch landscape detail 1",
+        type: "video",
+        src: "https://bibekjoshi.com/Grain/Compare_2.mp4",
+        poster: "/projects/watch-landscape/poster.jpg",
+        alt: "Watch landscape hero sequence",
       },
-      {
-        type: "image",
-        src: "/projects/watch-landscape/detail-02.jpg",
-        alt: "Watch landscape detail 2",
-      },
+
     ],
   },
 
   // ========================================
   // PROJECT 3: FLUID Droplet
+  // ========================================
+  {
+    slug: "Automobile-Porsche",
+    title: "Automobile Porsche",
+    year: "2025",
+    description:
+      "High-resolution fluid simulations exploring tension, release, and form.",
+    mediaType: "video",
+    src: "https://bibekjoshi.com/Automobile/Final.mp4",
+    poster: "/projects/fluid-rituals/poster.jpg",
+
+    mediaStack: [
+      {
+        type: "video",
+        src: "https://bibekjoshi.com/Automobile/SH10.mp4",
+        poster: "/projects/fluid-rituals/poster.jpg",
+        alt: "Fluid rituals hero sequence",
+      },
+      {
+        type: "video",
+        src: "https://bibekjoshi.com/Automobile/sh30.mp4",
+        poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
+        alt: "Fluid simulation detail sequence",
+      },
+      {
+        type: "video",
+        src: "https://bibekjoshi.com/Automobile/sh31.mp4",
+        poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
+        alt: "Fluid simulation detail sequence",
+      },
+      {
+        type: "video",
+        src: "https://bibekjoshi.com/Automobile/sh32.mp4",
+        poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
+        alt: "Fluid simulation detail sequence",
+      },
+     
+    ],
+  },
+
+  // ========================================
+  // PROJECT 4: FLUID Droplet
   // ========================================
   {
     slug: "fluid-droplet",
@@ -90,20 +130,13 @@ export const projects: Project[] = [
 
     mediaStack: [
       {
-        type: "video",
-        src: "https://bibekjoshi.com/Dropper/Final_Dropper.mp4",
-        poster: "/projects/fluid-rituals/poster.jpg",
-        alt: "Fluid rituals hero sequence",
-      },
-      {
-        type: "video",
-        src: "https://bibekjoshi.com/Dropper/Final_Dropper.mp4",
-        poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
-        alt: "Fluid simulation detail sequence",
-      },
-      {
         type: "image",
-        src: "/projects/fluid-rituals/still-01.jpg",
+        src: "https://bibekjoshi.com/Dropper/Dropper_1.png",
+        alt: "Fluid ritual still frame",
+      },
+       {
+        type: "image",
+        src: "https://bibekjoshi.com/Dropper/Dropper_2.png",
         alt: "Fluid ritual still frame",
       },
     ],
