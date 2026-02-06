@@ -11,14 +11,14 @@ export const projects: Project[] = [
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
-    src: "https://bibekjoshi.com/Grass/render_grass.mp4",
+    src: "https://cdn.bibekjoshi.com/Grass/render_grass.mp4",
 
 
     /*
     mediaStack: [
       {
         type: "video",
-        src: "https://bibekjoshi.com/Grass/render_grass.mp4",
+        src: "https://cdn.bibekjoshi.com/Grass/render_grass.mp4",
         alt: "Procedural grass transformation sequence",
       },
       {
@@ -52,20 +52,20 @@ export const projects: Project[] = [
     description:
       "Artifacts generated through rule-based systems and controlled noise.",
     mediaType: "video",
-    src: "https://bibekjoshi.com/Grain/final.mov",
+    src: "https://cdn.bibekjoshi.com/Grain/final.mov",
     poster: "/projects/watch-landscape/poster.jpg",
 
     mediaStack: [
       {
         type: "video",
-        src: "https://bibekjoshi.com/Grain/Compare_1.mp4",
+        src: "https://cdn.bibekjoshi.com/Grain/Compare_1.mp4",
         poster: "/projects/watch-landscape/poster.jpg",
         alt: "Watch landscape hero sequence",
       },
 
       {
         type: "video",
-        src: "https://bibekjoshi.com/Grain/Compare_2.mp4",
+        src: "https://cdn.bibekjoshi.com/Grain/Compare_2.mp4",
         poster: "/projects/watch-landscape/poster.jpg",
         alt: "Watch landscape hero sequence",
       },
@@ -83,31 +83,31 @@ export const projects: Project[] = [
     description:
       "High-resolution fluid simulations exploring tension, release, and form.",
     mediaType: "video",
-    src: "https://bibekjoshi.com/Automobile/Final.mp4",
+    src: "https://cdn.bibekjoshi.com/Automobile/Final.mp4",
     poster: "/projects/fluid-rituals/poster.jpg",
 
     mediaStack: [
       {
         type: "video",
-        src: "https://bibekjoshi.com/Automobile/SH10.mp4",
+        src: "https://cdn.bibekjoshi.com/Automobile/SH10.mp4",
         poster: "/projects/fluid-rituals/poster.jpg",
         alt: "Fluid rituals hero sequence",
       },
       {
         type: "video",
-        src: "https://bibekjoshi.com/Automobile/sh30.mp4",
+        src: "https://cdn.bibekjoshi.com/Automobile/sh30.mp4",
         poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
         alt: "Fluid simulation detail sequence",
       },
       {
         type: "video",
-        src: "https://bibekjoshi.com/Automobile/sh31.mp4",
+        src: "https://cdn.bibekjoshi.com/Automobile/sh31.mp4",
         poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
         alt: "Fluid simulation detail sequence",
       },
       {
         type: "video",
-        src: "https://bibekjoshi.com/Automobile/sh32.mp4",
+        src: "https://cdn.bibekjoshi.com/Automobile/sh32.mp4",
         poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
         alt: "Fluid simulation detail sequence",
       },
@@ -125,18 +125,18 @@ export const projects: Project[] = [
     description:
       "High-resolution fluid simulations exploring tension, release, and form.",
     mediaType: "video",
-    src: "https://bibekjoshi.com/Dropper/Final_Dropper.mp4",
+    src: "https://cdn.bibekjoshi.com/Dropper/Final_Dropper.mp4",
     poster: "/projects/fluid-rituals/poster.jpg",
 
     mediaStack: [
       {
         type: "image",
-        src: "https://bibekjoshi.com/Dropper/Dropper_1.png",
+        src: "https://cdn.bibekjoshi.com/Dropper/Dropper_1.png",
         alt: "Fluid ritual still frame",
       },
        {
         type: "image",
-        src: "https://bibekjoshi.com/Dropper/Dropper_2.png",
+        src: "https://cdn.bibekjoshi.com/Dropper/Dropper_2.png",
         alt: "Fluid ritual still frame",
       },
     ],
