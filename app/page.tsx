@@ -24,7 +24,7 @@ export default function Home() {
           <div className="max-w-5xl hero-text">
             {/* Meta - refined spacing */}
             <span className="text-meta-strong block mb-8 opacity-60">
-              Vex Alchemy
+              Bibek Joshi
             </span>
 
             {/* Thesis - improved typography hierarchy */}
@@ -84,7 +84,7 @@ export default function Home() {
         <footer className="px-6 md:px-16 py-20 border-t border-black/10">
           <div className="flex flex-col md:flex-row justify-between gap-12">
             <div>
-              <p className="text-meta-strong mb-4">Vex Alchemy</p>
+              <p className="text-meta-strong mb-4">Bibek Joshi</p>
               <p className="text-sm text-neutral-500 max-w-md leading-relaxed">
                 Procedural CGI practice focused on systems-driven motion and form.
               </p>

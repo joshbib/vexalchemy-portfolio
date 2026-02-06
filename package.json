@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
     "@react-three/fiber": "^9.5.0",
     "framer-motion": "^12.29.2",
     "next": "16.1.6",
@@ -27,7 +26,6 @@
     "@types/three": "^0.182.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
-    "prisma": "^5.15.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

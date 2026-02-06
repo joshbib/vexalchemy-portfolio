@@ -4,7 +4,7 @@
 import MediaBlock from "@/components/MediaBlock";
 import Link from "next/link";
 import { projects } from "@/lib/projects";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ProjectStack() {
   return (
@@ -18,13 +18,20 @@ export default function ProjectStack() {
 
 function ProjectArticle({ project }: { project: any }) {
   const [isRevealed, setIsRevealed] = useState(false);
-  const [touchTimeout, setTouchTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const touchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (touchTimeoutRef.current) {
+        clearTimeout(touchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleTouchStart = () => {
-    if (touchTimeout) clearTimeout(touchTimeout);
+    if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
     setIsRevealed(true);
-    const timeout = setTimeout(() => setIsRevealed(false), 2400);
-    setTouchTimeout(timeout);
+    touchTimeoutRef.current = setTimeout(() => setIsRevealed(false), 2400);
   };
 
   return (
