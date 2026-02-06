@@ -1,9 +1,9 @@
 // lib/collage-images.ts
 
 export const COLLAGE_IMAGES = [
-  "/collage/1.png",
-  "/collage/2.png",
-  "/collage/3.png",
-  "/collage/4.png",
-  "/collage/5.png",
+  "https://cdn.bibekjoshi.com/Collage/4k.2048.edit.png",
+  "https://cdn.bibekjoshi.com/Collage/final1.png",
+  "https://cdn.bibekjoshi.com/Collage/ren.static.0001.png",
+  "https://cdn.bibekjoshi.com/Collage/Still%202025-11-17%20113356_1.1.1.png",
+  "https://cdn.bibekjoshi.com/Collage/final.png",
 ];
