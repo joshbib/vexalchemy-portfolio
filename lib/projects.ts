@@ -2,20 +2,20 @@ import type { Project } from "./project-types";
 
 export const projects: Project[] = [
   {
-    slug: "fluid-growth",
-    title: "Fluid Growth",
+    slug: "Work-Space",
+    title: "Work Space",
     year: "2024",
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
 
-    // Hero video - place in: public/projects/fluid-growth/fluid_growth.mp4
-    src: "/projects/fluid-growth/fluid_growth.mp4",
+    // Hero video - place in:
+    src: "https://bibekjoshi.com/Grass/render_grass.mp4",
 
     mediaStack: [
       {
-        type: "image",
-        src: "/projects/fluid-growth/frame-01.jpg",
+        type: "video",  // FIXED: Changed from "image" to "video" (src is .mp4)
+        src: "https://bibekjoshi.com/Grass/render_grass.mp4",
         alt: "Fluid growth process frame 1",
       },
       {
@@ -82,6 +82,14 @@ export const projects: Project[] = [
     ],
   },
 ];
+
+export function getProjectSlugs(): string[] {
+  return projects.map((project) => project.slug);
+}
+
+export function getProjectBySlug(slug: string): Project | undefined {
+  return projects.find((project) => project.slug === slug);
+}
 
 /* 
   📁 RECOMMENDED FILE STRUCTURE:

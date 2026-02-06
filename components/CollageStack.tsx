@@ -16,6 +16,7 @@ export default function CollageStack() {
             <img
               key={i}
               src={src}
+              alt={`Visual study ${i + 1}`}
               loading="lazy"
               className="collage-item mb-6"
             />
