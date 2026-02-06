@@ -1,6 +1,7 @@
 "use client";
 
 import type { LayoutBlock, MediaItem } from "@/lib/project-types";
+import { useEffect, useRef } from "react";
 
 type EditorialLayoutProps = {
   blocks: LayoutBlock[];
@@ -69,6 +70,7 @@ function LayoutBlockRenderer({
 
 /* ========================================
    LAYOUT COMPONENTS
+   All layouts now use natural media sizing (no forced aspect ratios)
    ======================================== */
 
 // 1. FULL BLEED
@@ -82,12 +84,12 @@ function FullLayout({
   index: number;
 }) {
   return (
-    <div className="w-full py-8 md:py-12">
+    <div className="w-full py-8 md:py-12 flex justify-center">
       <MediaRenderer
         media={media}
         projectTitle={projectTitle}
         index={index}
-        className="w-full aspect-[21/9]"
+        className=""
       />
     </div>
   );
@@ -110,13 +112,13 @@ function TwoUpLayout({
           media={media[0]}
           projectTitle={projectTitle}
           index={index * 2}
-          className="aspect-[4/3]"
+          className=""
         />
         <MediaRenderer
           media={media[1]}
           projectTitle={projectTitle}
           index={index * 2 + 1}
-          className="aspect-[4/3]"
+          className=""
         />
       </div>
     </div>
@@ -140,19 +142,19 @@ function ThreeUpLayout({
           media={media[0]}
           projectTitle={projectTitle}
           index={index * 3}
-          className="aspect-square"
+          className=""
         />
         <MediaRenderer
           media={media[1]}
           projectTitle={projectTitle}
           index={index * 3 + 1}
-          className="aspect-square"
+          className=""
         />
         <MediaRenderer
           media={media[2]}
           projectTitle={projectTitle}
           index={index * 3 + 2}
-          className="aspect-square"
+          className=""
         />
       </div>
     </div>
@@ -177,14 +179,14 @@ function LeftHeavyLayout({
             media={media[0]}
             projectTitle={projectTitle}
             index={index * 2}
-            className="aspect-[16/10]"
+            className=""
           />
         </div>
         <MediaRenderer
           media={media[1]}
           projectTitle={projectTitle}
           index={index * 2 + 1}
-          className="aspect-[16/10]"
+          className=""
         />
       </div>
     </div>
@@ -208,14 +210,14 @@ function RightHeavyLayout({
           media={media[0]}
           projectTitle={projectTitle}
           index={index * 2}
-          className="aspect-[16/10]"
+          className=""
         />
         <div className="md:col-span-2">
           <MediaRenderer
             media={media[1]}
             projectTitle={projectTitle}
             index={index * 2 + 1}
-            className="aspect-[16/10]"
+            className=""
           />
         </div>
       </div>
@@ -242,7 +244,7 @@ function VerticalStackLayout({
             media={item}
             projectTitle={projectTitle}
             index={index * 100 + i}
-            className="aspect-[16/10]"
+            className=""
           />
         ))}
       </div>
@@ -264,12 +266,12 @@ function OffsetDuoLayout({
     <div className="px-6 md:px-16 py-8 md:py-16">
       <div className="relative max-w-[1400px] mx-auto">
         {/* Background image - larger */}
-        <div className="relative aspect-[16/10] md:aspect-[21/9]">
+        <div className="relative">
           <MediaRenderer
             media={media[0]}
             projectTitle={projectTitle}
             index={index * 2}
-            className="w-full h-full"
+            className=""
           />
         </div>
         
@@ -279,7 +281,7 @@ function OffsetDuoLayout({
             media={media[1]}
             projectTitle={projectTitle}
             index={index * 2 + 1}
-            className="aspect-[4/3] shadow-2xl"
+            className="shadow-2xl"
           />
         </div>
       </div>
@@ -311,7 +313,7 @@ function CaptionHeroLayout({
           media={media}
           projectTitle={projectTitle}
           index={index}
-          className={large ? 'aspect-[21/9]' : 'aspect-[16/10]'}
+          className=""
         />
         <p className="mt-4 md:mt-6 text-[11px] md:text-[13px] text-neutral-500 tracking-wide max-w-[600px]">
           {caption}
@@ -322,7 +324,8 @@ function CaptionHeroLayout({
 }
 
 /* ========================================
-   MEDIA RENDERER - Handles image/video
+   MEDIA RENDERER - Handles image/video with natural sizing
+   Uses intrinsic dimensions like hero media (no forced aspect ratios)
    ======================================== */
 function MediaRenderer({
   media,
@@ -335,34 +338,70 @@ function MediaRenderer({
   index: number;
   className?: string;
 }) {
-  const baseClasses = "relative overflow-hidden rounded-sm bg-neutral-100";
-  const combinedClasses = className ? `${baseClasses} ${className}` : baseClasses;
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Viewport-aware video playback
+  useEffect(() => {
+    if (media.type !== "video" || !videoRef.current) return;
+
+    const video = videoRef.current;
+    
+    // Set video properties
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+
+    // Create intersection observer
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Play when entering viewport
+          video.play().catch(() => {
+            // Silently handle play failures (common on iOS, etc.)
+          });
+        } else {
+          // Pause when leaving viewport
+          video.pause();
+        }
+      },
+      { 
+        threshold: 0.4 // Play when 40% visible (same as MediaBlock)
+      }
+    );
+
+    observer.observe(video);
+
+    // Cleanup
+    return () => {
+      observer.disconnect();
+    };
+  }, [media.type]);
+
+  // Natural sizing - respects intrinsic dimensions
+  const naturalClasses = `block w-full max-w-full h-auto ${className}`;
 
   if (media.type === "image") {
     return (
-      <div className={combinedClasses}>
-        <img
-          src={media.src}
-          alt={media.alt || `${projectTitle} - Image ${index + 1}`}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
-      </div>
+      <img
+        src={media.src}
+        alt={media.alt || `${projectTitle} - Image ${index + 1}`}
+        className={naturalClasses}
+        loading="lazy"
+      />
     );
   }
 
-  // Video
+  // Video with viewport-aware playback and natural sizing
   return (
-    <div className={combinedClasses}>
-      <video
-        src={media.src}
-        poster={media.poster}
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-    </div>
+    <video
+      ref={videoRef}
+      src={media.src}
+      poster={media.poster}
+      className={naturalClasses}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+    />
   );
 }

@@ -42,7 +42,7 @@ export default function ProjectHero({
           w-full
           px-6
           md:px-16
-          max-w-[1000px]  // ⚠️ THIS IS YOUR CONSTRAINT
+          max-w-[1525px]  // ⚠️ THIS IS YOUR CONSTRAINT
           flex
           justify-center
           items-center

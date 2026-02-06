@@ -1,10 +1,11 @@
-// app/work/[slug]/page.tsx - FIXED VERSION WITH MEDIASTACK RENDERING
+// app/work/[slug]/page.tsx - UPDATED WITH VIEWPORT-AWARE VIDEOS
 import { projects } from "@/lib/projects";
 import PageFade from "@/components/PageFade";
 import ProjectSwipeShell from "@/components/ProjectSwipeShell";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectHero from "@/components/ProjectHero";
 import EditorialLayout from "@/components/EditorialLayout";
+import ViewportVideo from "@/components/ViewportVideo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -97,38 +98,32 @@ export default async function ProjectPage({ params }: PageProps) {
           )}
 
           {/* ========================================
-              MEDIA STACK - FALLBACK
+              MEDIA STACK - FALLBACK WITH NATURAL SIZING
+              Uses intrinsic dimensions like hero media
               ======================================== */}
           {!project.editorial && project.mediaStack && project.mediaStack.length > 0 && (
             <section className="px-6 md:px-16 pb-16 md:pb-24">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1400px] mx-auto">
                 {project.mediaStack.map((media, index) => (
-                  <div
-                    key={`${media.src}-${index}`}
-                    className="relative aspect-video overflow-hidden rounded-sm bg-neutral-100"
-                  >
+                  <div key={`${media.src}-${index}`} className="flex flex-col">
                     {media.type === "image" ? (
                       <img
                         src={media.src}
                         alt={media.alt || `${project.title} - Image ${index + 1}`}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="block w-full max-w-full h-auto"
                         loading="lazy"
                       />
                     ) : (
-                      <video
+                      <ViewportVideo
                         src={media.src}
                         poster={media.poster}
-                        className="absolute inset-0 w-full h-full object-cover"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
+                        className=""
                       />
                     )}
                     {media.caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-2">
+                      <p className="mt-3 text-[11px] md:text-[13px] text-neutral-500 tracking-wide">
                         {media.caption}
-                      </div>
+                      </p>
                     )}
                   </div>
                 ))}
