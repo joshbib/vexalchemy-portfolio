@@ -105,18 +105,19 @@ main > section:first-of-type p {
 .hero-text::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -2rem;
   pointer-events: none;
   z-index: 0;
   background:
     radial-gradient(
-      75% 70% at 35% 30%,
-      rgba(247, 247, 245, 0.9) 0%,
-      rgba(247, 247, 245, 0.42) 45%,
-      rgba(247, 247, 245, 0) 75%
+      ellipse 80% 75% at 40% 35%,
+      rgba(247, 247, 245, 0.92) 0%,
+      rgba(247, 247, 245, 0.48) 42%,
+      rgba(247, 247, 245, 0.15) 68%,
+      rgba(247, 247, 245, 0) 88%
     );
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
 }
 
 .hero-text > * {
@@ -151,13 +152,14 @@ main > section:first-of-type p {
   .hero-text::before {
     background:
       radial-gradient(
-        75% 70% at 35% 30%,
-        rgba(247, 247, 245, 0.7) 0%,
+        ellipse 75% 70% at 38% 33%,
+        rgba(247, 247, 245, 0.68) 0%,
         rgba(247, 247, 245, 0.28) 45%,
-        rgba(247, 247, 245, 0) 75%
+        rgba(247, 247, 245, 0.08) 70%,
+        rgba(247, 247, 245, 0) 92%
       );
-    backdrop-filter: blur(1.5px);
-    -webkit-backdrop-filter: blur(1.5px);
+    backdrop-filter: blur(0.75px);
+    -webkit-backdrop-filter: blur(0.75px);
   }
 }
 

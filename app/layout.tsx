@@ -1,5 +1,6 @@
 // app/layout.tsx - COMPLETE WITH FULLSCREEN DOT GRID
 import "./globals.css";
+import "./accessibility.css";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import SphericalDotGrid from "@/components/three/SphericalDotGrid";

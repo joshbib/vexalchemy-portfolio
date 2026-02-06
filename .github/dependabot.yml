@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    versioning-strategy: lockfile-only
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"

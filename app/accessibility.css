@@ -1,0 +1,80 @@
+@media (prefers-contrast: more) {
+  :root {
+    --muted: #4b4b4b;
+    --border: rgba(0, 0, 0, 0.16);
+  }
+
+  .text-neutral-300 {
+    color: rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .text-neutral-400 {
+    color: rgba(0, 0, 0, 0.55) !important;
+  }
+
+  .text-neutral-500 {
+    color: rgba(0, 0, 0, 0.62) !important;
+  }
+
+  .text-neutral-600 {
+    color: rgba(0, 0, 0, 0.72) !important;
+  }
+
+  main > section:first-of-type::before {
+    background:
+      radial-gradient(
+        70% 55% at 22% 30%,
+        rgba(247, 247, 245, 0.86),
+        rgba(247, 247, 245, 0) 75%
+      );
+  }
+
+  .hero-text::before {
+    background:
+      radial-gradient(
+        ellipse 80% 75% at 40% 35%,
+        rgba(247, 247, 245, 0.95) 0%,
+        rgba(247, 247, 245, 0.55) 42%,
+        rgba(247, 247, 245, 0.2) 68%,
+        rgba(247, 247, 245, 0) 88%
+      );
+  }
+
+  .media-overlay {
+    background: rgba(247, 247, 245, 0.84);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .media-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(247, 247, 245, 0.94);
+  }
+
+  .hero-text::before {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .grain-overlay {
+    display: none;
+  }
+
+  main > section:first-of-type::before,
+  .hero-text::before {
+    content: none;
+  }
+
+  .media-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .ghost-handle,
+  .esc-key {
+    box-shadow: none;
+  }
+}
