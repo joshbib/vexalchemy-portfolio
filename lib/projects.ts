@@ -1,6 +1,9 @@
 import type { Project } from "./project-types";
 
 export const projects: Project[] = [
+  // ========================================
+  // PROJECT 1: WORK SPACE (CANONICAL)
+  // ========================================
   {
     slug: "Work-Space",
     title: "Work Space",
@@ -8,15 +11,13 @@ export const projects: Project[] = [
     description:
       "Exploration of procedural transformation and organic motion using Houdini.",
     mediaType: "video",
-
-    // Hero video - place in:
     src: "https://bibekjoshi.com/Grass/render_grass.mp4",
 
     mediaStack: [
       {
-        type: "video",  // FIXED: Changed from "image" to "video" (src is .mp4)
+        type: "video",
         src: "https://bibekjoshi.com/Grass/render_grass.mp4",
-        alt: "Fluid growth process frame 1",
+        alt: "Procedural grass transformation sequence",
       },
       {
         type: "image",
@@ -32,32 +33,47 @@ export const projects: Project[] = [
         type: "video",
         src: "/projects/fluid-growth/process.mp4",
         poster: "/projects/fluid-growth/process-poster.jpg",
+        alt: "Behind the scenes process video",
       },
     ],
   },
+
+  // ========================================
+  // PROJECT 2: WATCH LANDSCAPE
+  // ========================================
   {
-    slug: "procedural-relics",
-    title: "Procedural Relics",
+    slug: "Watch-Landscape",
+    title: "Watch Landscape",
     year: "2023",
     description:
       "Artifacts generated through rule-based systems and controlled noise.",
     mediaType: "video",
-    src: "/projects/procedural-relics/hero.mp4",
-    poster: "/projects/procedural-relics/poster.jpg",
+    src: "https://bibekjoshi.com/Grain/final.mov",
+    poster: "/projects/watch-landscape/poster.jpg",
 
     mediaStack: [
       {
-        type: "image",
-        src: "/projects/procedural-relics/detail-01.jpg",
-        alt: "Procedural relic detail",
+        type: "video",
+        src: "/projects/watch-landscape/hero.mp4",
+        poster: "/projects/watch-landscape/poster.jpg",
+        alt: "Watch landscape hero sequence",
       },
       {
         type: "image",
-        src: "/projects/procedural-relics/detail-02.jpg",
-        alt: "Procedural relic detail",
+        src: "/projects/watch-landscape/detail-01.jpg",
+        alt: "Watch landscape detail 1",
+      },
+      {
+        type: "image",
+        src: "/projects/watch-landscape/detail-02.jpg",
+        alt: "Watch landscape detail 2",
       },
     ],
   },
+
+  // ========================================
+  // PROJECT 3: FLUID RITUALS
+  // ========================================
   {
     slug: "fluid-rituals",
     title: "Fluid Rituals",
@@ -71,8 +87,15 @@ export const projects: Project[] = [
     mediaStack: [
       {
         type: "video",
+        src: "/projects/fluid-rituals/hero.mp4",
+        poster: "/projects/fluid-rituals/poster.jpg",
+        alt: "Fluid rituals hero sequence",
+      },
+      {
+        type: "video",
         src: "/projects/fluid-rituals/sequence-01.mp4",
         poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
+        alt: "Fluid simulation detail sequence",
       },
       {
         type: "image",
@@ -90,30 +113,3 @@ export function getProjectSlugs(): string[] {
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);
 }
-
-/* 
-  📁 RECOMMENDED FILE STRUCTURE:
-  
-  public/
-    projects/
-      fluid-growth/
-        fluid-growth.mp4       (hero video)
-        frame-01.jpg
-        frame-02.jpg
-        frame-03.jpg
-        process.mp4
-        process-poster.jpg
-      
-      procedural-relics/
-        hero.mp4
-        poster.jpg
-        detail-01.jpg
-        detail-02.jpg
-      
-      fluid-rituals/
-        hero.mp4
-        poster.jpg
-        sequence-01.mp4
-        sequence-01-poster.jpg
-        still-01.jpg
-*/

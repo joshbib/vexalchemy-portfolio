@@ -136,7 +136,7 @@ export default function MediaBlock({
         loop
         playsInline
         preload="auto"
-        className="block max-w-full max-h-[50vh] h-auto w-auto cursor-pointer select-none"
+        className="block w-full max-w-full max-h-[58vh] md:max-h-[62vh] lg:max-h-[65vh] h-auto cursor-pointer select-none"
         style={{ touchAction: "pan-y" }} // keep vertical scroll
         onTouchStart={(e) => {
           const video = videoRef.current;

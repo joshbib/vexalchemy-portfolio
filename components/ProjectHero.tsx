@@ -42,7 +42,7 @@ export default function ProjectHero({
           w-full
           px-6
           md:px-16
-          max-w-[800px]
+          max-w-[1000px]  // ⚠️ THIS IS YOUR CONSTRAINT
           flex
           justify-center
           items-center
@@ -56,7 +56,7 @@ export default function ProjectHero({
       </div>
 
       {/* Elegant divider */}
-      <div className="mt-16 md:mt-20 w-20 h-[1.5px] bg-gradient-to-r from-transparent via-black/15 to-transparent" />
+      <div className="mt-16 md:mt-20a w-20 h-[1.5px] bg-gradient-to-r from-transparent via-black/15 to-transparent" />
     </motion.section>
   );
 }
