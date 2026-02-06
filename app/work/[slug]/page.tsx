@@ -1,4 +1,4 @@
-// app/work/[slug]/page.tsx - PREMIUM REFINED VERSION
+// app/work/[slug]/page.tsx - FIXED VERSION WITH MEDIASTACK RENDERING
 import { projects } from "@/lib/projects";
 import PageFade from "@/components/PageFade";
 import ProjectSwipeShell from "@/components/ProjectSwipeShell";
@@ -87,6 +87,46 @@ export default async function ProjectPage({ params }: PageProps) {
             mediaType={project.mediaType}
             src={project.src}
           />
+
+          {/* ========================================
+              MEDIA STACK - THIS IS THE FIX
+              ======================================== */}
+          {project.mediaStack && project.mediaStack.length > 0 && (
+            <section className="px-6 md:px-16 pb-16 md:pb-24">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1400px] mx-auto">
+                {project.mediaStack.map((media, index) => (
+                  <div
+                    key={`${media.src}-${index}`}
+                    className="relative aspect-video overflow-hidden rounded-sm bg-neutral-100"
+                  >
+                    {media.type === "image" ? (
+                      <img
+                        src={media.src}
+                        alt={media.alt || `${project.title} - Image ${index + 1}`}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <video
+                        src={media.src}
+                        poster={media.poster}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    )}
+                    {media.caption && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-2">
+                        {media.caption}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Spacer before navigation */}
           <div className="pb-16 md:pb-24" />

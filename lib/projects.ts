@@ -13,6 +13,8 @@ export const projects: Project[] = [
     mediaType: "video",
     src: "https://bibekjoshi.com/Grass/render_grass.mp4",
 
+
+    /*
     mediaStack: [
       {
         type: "video",
@@ -36,6 +38,8 @@ export const projects: Project[] = [
         alt: "Behind the scenes process video",
       },
     ],
+    */                                                                //this is the comment way for the section
+    
   },
 
   // ========================================
@@ -72,28 +76,28 @@ export const projects: Project[] = [
   },
 
   // ========================================
-  // PROJECT 3: FLUID RITUALS
+  // PROJECT 3: FLUID Droplet
   // ========================================
   {
-    slug: "fluid-rituals",
-    title: "Fluid Rituals",
+    slug: "fluid-droplet",
+    title: "Fluid Droplet",
     year: "2025",
     description:
       "High-resolution fluid simulations exploring tension, release, and form.",
     mediaType: "video",
-    src: "/projects/fluid-rituals/hero.mp4",
+    src: "https://bibekjoshi.com/Dropper/Final_Dropper.mp4",
     poster: "/projects/fluid-rituals/poster.jpg",
 
     mediaStack: [
       {
         type: "video",
-        src: "/projects/fluid-rituals/hero.mp4",
+        src: "https://bibekjoshi.com/Dropper/Final_Dropper.mp4",
         poster: "/projects/fluid-rituals/poster.jpg",
         alt: "Fluid rituals hero sequence",
       },
       {
         type: "video",
-        src: "/projects/fluid-rituals/sequence-01.mp4",
+        src: "https://bibekjoshi.com/Dropper/Final_Dropper.mp4",
         poster: "/projects/fluid-rituals/sequence-01-poster.jpg",
         alt: "Fluid simulation detail sequence",
       },
