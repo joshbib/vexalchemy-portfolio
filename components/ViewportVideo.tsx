@@ -15,6 +15,7 @@ type ViewportVideoProps = {
  */
 export default function ViewportVideo({ src, poster, className = "" }: ViewportVideoProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -51,24 +52,52 @@ export default function ViewportVideo({ src, poster, className = "" }: ViewportV
     };
   }, []);
 
+  // Progress indicator
+  useEffect(() => {
+    const video = videoRef.current;
+    const container = containerRef.current;
+    if (!video || !container) return;
+
+    const progressBar = container.querySelector('.video-progress-bar') as HTMLElement;
+    if (!progressBar) return;
+
+    const updateProgress = () => {
+      if (!video.duration || video.paused) return;
+      const progress = (video.currentTime / video.duration) * 100;
+      progressBar.style.transform = `scaleX(${progress / 100})`;
+    };
+
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('loadedmetadata', updateProgress);
+
+    return () => {
+      video.removeEventListener('timeupdate', updateProgress);
+      video.removeEventListener('loadedmetadata', updateProgress);
+    };
+  }, []);
+
   // Natural sizing classes - respects intrinsic video dimensions
   const naturalClasses = `block w-full max-w-full h-auto ${className}`;
 
   return (
-    <video
-      ref={videoRef}
-      src={src}
-      poster={poster}
-      className={naturalClasses}
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      onContextMenu={(e) => e.preventDefault()}
-      onDragStart={(e) => e.preventDefault()}
-      draggable={false}
-      controlsList="nodownload nofullscreen noremoteplayback"
-      disablePictureInPicture
-    />
+    <div ref={containerRef} className="relative inline-block w-full">
+      <video
+        ref={videoRef}
+        src={src}
+        poster={poster}
+        className={naturalClasses}
+        style={{ touchAction: "pan-y", pointerEvents: "auto" }}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
+        controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
+      />
+      <div className="video-progress-bar video-progress-bar-hero" />
+    </div>
   );
 }

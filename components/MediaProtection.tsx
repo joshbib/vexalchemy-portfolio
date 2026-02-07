@@ -50,7 +50,8 @@ export default function MediaProtection() {
     };
 
     // Prevent right-click and long-press on touch devices
-    const preventLongPress = (e: TouchEvent) => {
+    // Use contextmenu event instead of touchstart to avoid blocking scroll
+    const preventLongPressMenu = (e: Event) => {
       const target = e.target as HTMLElement;
       if (target.tagName === "IMG" || target.tagName === "VIDEO") {
         e.preventDefault();
@@ -61,14 +62,15 @@ export default function MediaProtection() {
     document.addEventListener("contextmenu", preventContextMenu);
     document.addEventListener("dragstart", preventDrag);
     document.addEventListener("keydown", preventKeyboardShortcuts);
-    document.addEventListener("touchstart", preventLongPress, { passive: false });
+    // Use contextmenu for long-press instead of touchstart to allow scrolling
+    document.addEventListener("contextmenu", preventLongPressMenu);
 
     // Cleanup
     return () => {
       document.removeEventListener("contextmenu", preventContextMenu);
       document.removeEventListener("dragstart", preventDrag);
       document.removeEventListener("keydown", preventKeyboardShortcuts);
-      document.removeEventListener("touchstart", preventLongPress);
+      document.removeEventListener("contextmenu", preventLongPressMenu);
     };
   }, []);
 
