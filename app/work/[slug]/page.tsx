@@ -56,7 +56,7 @@ export default async function ProjectPage({ params }: PageProps) {
       >
         <main className="min-h-screen">
           {/* BACK LINK - Refined positioning */}
-          <div className="px-6 md:px-16 pt-10 md:pt-12">
+          <div className="px-6 md:px-16 pt-6 md:pt-12">
             <Link
               href="/"
               className="
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: PageProps) {
           </div>
 
           {/* HEADER - Left aligned, elegant hierarchy */}
-          <section className="px-6 md:px-16 pt-8 md:pt-12 pb-16 md:pb-20">
+          <section className="px-6 md:px-16 pt-2 md:pt-12 pb-16 md:pb-20">
             <ProjectHeader
               title={project.title}
               year={project.year}

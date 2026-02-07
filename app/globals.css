@@ -83,17 +83,20 @@ h1 {
 }
 
 
-main>section:first-of-type {
-  padding-top: 5rem;
-  padding-bottom: 6rem;
+section.page-hero {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
 }
 
-main>section:first-of-type h1 {
-  font-size: 2.5rem;
-  line-height: 1.08;
+section.page-hero h1.hero-title {
+  font-size: clamp(20px, 5vw, 32px);
+  line-height: 1.1;
 }
 
-main>section:first-of-type p {
+section.page-hero p {
   max-width: 34ch;
 }
 
@@ -125,17 +128,18 @@ main>section:first-of-type p {
 }
 
 @media (min-width: 768px) {
-  main>section:first-of-type {
+  section.page-hero {
+    min-height: 100svh;
     padding-top: 0;
     padding-bottom: 0;
   }
 
-  main>section:first-of-type h1 {
+  section.page-hero h1.hero-title {
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: 0.98;
   }
 
-  main>section:first-of-type p {
+  section.page-hero p {
     max-width: 60ch;
   }
 
