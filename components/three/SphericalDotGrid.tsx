@@ -12,6 +12,7 @@ const vertexShader = `
   uniform float uIntensity;
   uniform float uTime;
   uniform float uIdleAnimation;
+  uniform float uScrollDepth;
   
   varying float vAlpha;
   varying float vInfluence;
@@ -64,6 +65,10 @@ const vertexShader = `
     // Subtle idle breathing animation
     float idleWave = sin(pos.x * 0.25 + uTime * 0.4) * cos(pos.y * 0.25 - uTime * 0.3);
     pos.z += idleWave * 0.08 * uIdleAnimation;
+    
+    // Scroll-based Z-depth breathing
+    // Global effect - affects all points subtly
+    pos.z += uScrollDepth * 1.2;
 
     // Adaptive alpha for sphere fade
     vAlpha = mix(0.45, 1.0, influence);
@@ -123,6 +128,8 @@ function DotGridPoints() {
   const idleAnimation = useRef(1);
   const targetIdle = useRef(1);
   const interactionTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollDepth = useRef(0);
+  const targetScrollDepth = useRef(0);
 
   const geometry = useMemo(() => {
     const gridSize = 120; // Denser field for full coverage
@@ -154,6 +161,7 @@ function DotGridPoints() {
           uIntensity: { value: 0.12 },
           uTime: { value: 0 },
           uIdleAnimation: { value: 1 },
+          uScrollDepth: { value: 0 },
           uColorInactive: { value: new THREE.Color(0.2, 0.19, 0.18) },
           uColorActive: { value: new THREE.Color(0.28, 0.27, 0.25) },
         },
@@ -206,12 +214,30 @@ function DotGridPoints() {
       }
     };
 
+    // Scroll listener for Z-depth modulation
+    const onScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      
+      // Normalize scroll to 0-1 range
+      const scrollProgress = maxScroll > 0 ? scrollY / maxScroll : 0;
+      
+      // Map to smooth sine wave for breathing effect
+      // Range: -1 to 1, creates a gentle push/pull
+      targetScrollDepth.current = Math.sin(scrollProgress * Math.PI * 2) * 0.4;
+    };
+
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    
+    // Initialize scroll depth
+    onScroll();
 
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("scroll", onScroll);
       if (interactionTimeout.current) {
         clearTimeout(interactionTimeout.current);
       }
@@ -225,11 +251,15 @@ function DotGridPoints() {
     
     // Smooth idle transition
     idleAnimation.current += (targetIdle.current - idleAnimation.current) * 0.04;
+    
+    // Smooth scroll depth transition (slower for breathing effect)
+    scrollDepth.current += (targetScrollDepth.current - scrollDepth.current) * 0.03;
 
     material.uniforms.uCursor.value.copy(mouse.current);
     material.uniforms.uMouseDelta.value.copy(mouseDelta.current);
     material.uniforms.uTime.value = clock.getElapsedTime();
     material.uniforms.uIdleAnimation.value = idleAnimation.current;
+    material.uniforms.uScrollDepth.value = scrollDepth.current;
   });
 
   return <points geometry={geometry} material={material} frustumCulled={false} />;
