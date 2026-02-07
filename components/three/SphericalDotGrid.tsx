@@ -62,17 +62,40 @@ function BackgroundParticles() {
   const targetCursor = useRef(new THREE.Vector2(0, 0));
   const scrollFactor = useRef(0);
 
+  // Calculate responsive spread based on viewport aspect ratio and camera setup
+  const { spreadX, spreadY } = useMemo(() => {
+    const aspect = size.width / size.height;
+    const fov = 50; // matches camera FOV
+    const distance = 30; // matches camera Z position
+    
+    // Calculate visible width and height at the particle plane (z=0)
+    const vFOV = (fov * Math.PI) / 180;
+    const visibleHeight = 2 * Math.tan(vFOV / 2) * distance;
+    const visibleWidth = visibleHeight * aspect;
+    
+    // Add 20% padding to ensure full coverage with drift
+    const spreadX = visibleWidth * 1.2;
+    const spreadY = visibleHeight * 1.2;
+    
+    return { spreadX, spreadY };
+  }, [size.width, size.height]);
+
   const geometry = useMemo(() => {
-    const count = 8000;
-    const spread = 40;
+    const aspect = size.width / size.height;
+    
+    // Adaptive particle count based on screen size
+    const baseCount = 8000;
+    const mobileThreshold = 768;
+    const isMobile = size.width < mobileThreshold;
+    const count = isMobile ? Math.floor(baseCount * 0.6) : baseCount; // 60% particles on mobile
     
     const positions = new Float32Array(count * 3);
     const originals = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      const x = (Math.random() - 0.5) * spread;
-      const y = (Math.random() - 0.5) * spread;
+      const x = (Math.random() - 0.5) * spreadX;
+      const y = (Math.random() - 0.5) * spreadY;
       const z = (Math.random() - 0.5) * 2;
       
       positions[i3] = x;
@@ -88,7 +111,7 @@ function BackgroundParticles() {
     geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geom.setAttribute("originalPosition", new THREE.BufferAttribute(originals, 3));
     return geom;
-  }, []);
+  }, [size.width, size.height, spreadX, spreadY]);
 
   const material = useMemo(
     () =>
@@ -98,7 +121,7 @@ function BackgroundParticles() {
           uCursorRadius: { value: 5.0 },
           uTime: { value: 0 },
           uScrollFactor: { value: 0 },
-          uColor: { value: new THREE.Color(0.14, 0.14, 0.14) },
+          uColor: { value: new THREE.Color(0.16, 0.15, 0.14) },
         },
         vertexShader,
         fragmentShader,
