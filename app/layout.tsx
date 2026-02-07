@@ -1,10 +1,10 @@
-// app/layout.tsx - COMPLETE WITH FULLSCREEN DOT GRID
+// app/layout.tsx - MINIMAL LAYOUT WITH GPU CURSOR
 import "./globals.css";
 import "./accessibility.css";
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import SphericalDotGrid from "@/components/three/SphericalDotGrid";
 import MediaProtection from "@/components/MediaProtection";
+import GPUCursor from "@/components/GPUCursor";
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: "Design-led digital experiences built with restraint and precision.",
     images: [
       {
-        url: "/og-image.png", // Create this image: 1200x630px
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Vex Alchemy",
@@ -56,13 +56,11 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         {/* Global media protection */}
         <MediaProtection />
-        
-        {/* Fixed fullscreen dot grid background */}
-        <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
-          <SphericalDotGrid className="w-full h-full" />
-        </div>
 
-        {/* Main content - positioned above the background */}
+        {/* Custom cursor */}
+        <GPUCursor />
+
+        {/* Main content */}
         <div className="relative z-10">
           <Suspense fallback={null}>
             {children}
