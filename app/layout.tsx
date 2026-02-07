@@ -4,6 +4,7 @@ import "./accessibility.css";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import SphericalDotGrid from "@/components/three/SphericalDotGrid";
+import MediaProtection from "@/components/MediaProtection";
 
 export const metadata: Metadata = {
   title: {
@@ -53,6 +54,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body suppressHydrationWarning>
+        {/* Global media protection */}
+        <MediaProtection />
+        
         {/* Fixed fullscreen dot grid background */}
         <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
           <SphericalDotGrid className="w-full h-full" />

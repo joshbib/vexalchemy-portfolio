@@ -1,3 +1,5 @@
+"use client";
+
 import type { ProjectMediaItem } from "@/lib/project-types";
 
 type Props = {
@@ -46,6 +48,9 @@ export default function ProjectMediaStack({ media }: Props) {
                     group-hover:scale-[1.02]
                   "
                   loading="lazy"
+                  onContextMenu={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
+                  draggable={false}
                 />
                 {item.caption && (
                   <div className="
@@ -87,6 +92,11 @@ export default function ProjectMediaStack({ media }: Props) {
                   h-full
                   object-cover
                 "
+                onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
+                draggable={false}
+                controlsList="nodownload nofullscreen noremoteplayback"
+                disablePictureInPicture
               />
             </div>
           );

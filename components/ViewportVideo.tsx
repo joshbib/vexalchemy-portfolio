@@ -64,6 +64,11 @@ export default function ViewportVideo({ src, poster, className = "" }: ViewportV
       loop
       playsInline
       preload="metadata"
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
+      draggable={false}
+      controlsList="nodownload nofullscreen noremoteplayback"
+      disablePictureInPicture
     />
   );
 }

@@ -5,7 +5,7 @@ import ProjectSwipeShell from "@/components/ProjectSwipeShell";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectHero from "@/components/ProjectHero";
 import EditorialLayout from "@/components/EditorialLayout";
-import ViewportVideo from "@/components/ViewportVideo";
+import ProjectMediaGrid from "@/components/ProjectMediaGrid";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -102,33 +102,7 @@ export default async function ProjectPage({ params }: PageProps) {
               Uses intrinsic dimensions like hero media
               ======================================== */}
           {!project.editorial && project.mediaStack && project.mediaStack.length > 0 && (
-            <section className="px-6 md:px-16 pb-16 md:pb-24">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1400px] mx-auto">
-                {project.mediaStack.map((media, index) => (
-                  <div key={`${media.src}-${index}`} className="flex flex-col">
-                    {media.type === "image" ? (
-                      <img
-                        src={media.src}
-                        alt={media.alt || `${project.title} - Image ${index + 1}`}
-                        className="block w-full max-w-full h-auto"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <ViewportVideo
-                        src={media.src}
-                        poster={media.poster}
-                        className=""
-                      />
-                    )}
-                    {media.caption && (
-                      <p className="mt-3 text-[11px] md:text-[13px] text-neutral-500 tracking-wide">
-                        {media.caption}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
+            <ProjectMediaGrid mediaStack={project.mediaStack} projectTitle={project.title} />
           )}
 
           {/* Spacer before navigation */}

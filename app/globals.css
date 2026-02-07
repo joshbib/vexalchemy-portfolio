@@ -876,3 +876,44 @@ section {
 .aspect-\[16\/10\] {
   aspect-ratio: 16 / 10;
 }
+
+/* -------------------------
+   MEDIA PROTECTION
+-------------------------- */
+
+/* Prevent text/media selection on all images and videos */
+img, video {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
+  -webkit-touch-callout: none;
+}
+
+/* Disable context menu on media containers */
+.project-card,
+.collage-item,
+.media-overlay-image,
+.media-sound {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Additional layer - prevent long press on mobile */
+img:active,
+video:active {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+/* Invisible overlay protection for extra security (optional) */
+.media-protect::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+

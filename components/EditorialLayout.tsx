@@ -387,6 +387,9 @@ function MediaRenderer({
         alt={media.alt || `${projectTitle} - Image ${index + 1}`}
         className={naturalClasses}
         loading="lazy"
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
       />
     );
   }
@@ -402,6 +405,11 @@ function MediaRenderer({
       loop
       playsInline
       preload="metadata"
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
+      draggable={false}
+      controlsList="nodownload nofullscreen noremoteplayback"
+      disablePictureInPicture
     />
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { COLLAGE_IMAGES } from "@/lib/collage-images";
 
 export default function CollageStack() {
@@ -19,6 +21,9 @@ export default function CollageStack() {
               alt={`Visual study ${i + 1}`}
               loading="lazy"
               className="collage-item mb-6"
+              onContextMenu={(e) => e.preventDefault()}
+              onDragStart={(e) => e.preventDefault()}
+              draggable={false}
             />
           ))}
         </div>

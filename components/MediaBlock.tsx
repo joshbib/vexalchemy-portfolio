@@ -81,6 +81,9 @@ export default function MediaBlock({
           alt=""
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover"
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          draggable={false}
         />
       );
     }
@@ -92,6 +95,11 @@ export default function MediaBlock({
         preload="none"
         muted
         className="absolute inset-0 w-full h-full object-cover"
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
+        controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
       />
     );
   }
@@ -100,7 +108,16 @@ export default function MediaBlock({
      HERO MODE — IMAGE
   -------------------------- */
   if (type === "image") {
-    return <img src={src} alt="" className="block max-w-full h-auto" />;
+    return (
+      <img 
+        src={src} 
+        alt="" 
+        className="block max-w-full h-auto" 
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
+      />
+    );
   }
 
   /* -------------------------
@@ -138,6 +155,11 @@ export default function MediaBlock({
         preload="auto"
         className="block w-full max-w-full max-h-[58vh] md:max-h-[62vh] lg:max-h-[65vh] h-auto cursor-pointer select-none"
         style={{ touchAction: "pan-y" }} // keep vertical scroll
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
+        controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
         onTouchStart={(e) => {
           const video = videoRef.current;
           if (!video) return;
