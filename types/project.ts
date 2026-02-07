@@ -3,6 +3,7 @@ export type MediaItem = {
   src: string;
   alt?: string;
   poster?: string;
+  caption?: string;
 };
 
 export type ProjectSummary = {
