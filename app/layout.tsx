@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     description: "Design-led digital experiences built with restraint and precision.",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://bibekjoshi.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Vex Alchemy",
+        alt: "Vex Alchemy — Procedural CGI & Motion Design",
       },
     ],
   },
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Vex Alchemy — Procedural CGI & Motion Design",
     description: "Design-led digital experiences built with restraint and precision.",
-    images: ["/og-image.png"],
+    images: ["https://bibekjoshi.com/og-image.png"],
   },
   robots: {
     index: true,
