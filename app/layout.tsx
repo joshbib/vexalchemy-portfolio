@@ -50,19 +50,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
       <body suppressHydrationWarning>
         {/* Global media protection */}
         <MediaProtection />
-        
+
         {/* GPU Cursor Effect - ADD THIS BLOCK */}
         <GPUCursor />
-        
+
         {/* Fixed fullscreen dot grid background */}
         <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
-          
+
         </div>
 
         {/* Main content - positioned above the background */}

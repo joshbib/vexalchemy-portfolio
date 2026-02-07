@@ -4,6 +4,46 @@ import PageFade from "@/components/PageFade";
 import AvailabilityStatus from "@/components/AvailabilityStatus";
 import Link from "next/link";
 
+// Instagram SVG Icon
+const InstagramIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
+
+const BehanceIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path d="M8.228 15.01c0 .546-.145.986-.435 1.319-.29.334-.73.501-1.32.501H4.11V11.23h2.19c.596 0 1.05.151 1.36.452.31.301.467.75.467 1.348 0 .584-.131 1.008-.393 1.272.298.156.494.426.494.708zM6.16 12.352H5.15v1.444h1.01c.42 0 .63-.223.63-.669 0-.516-.21-.775-.63-.775zm.14 2.378H5.15v1.54h1.15c.447 0 .67-.243.67-.73 0-.54-.223-.81-.67-.81zM15.176 13.92h-3.41c.048.718.423 1.076 1.125 1.076.438 0 .768-.112.992-.336l.783.56c-.4.577-1.011.865-1.834.865-1.32 0-2.094-.85-2.094-2.195 0-1.353.76-2.192 2.029-2.192 1.22 0 1.884.791 1.884 1.942v.28zm-1.07-.751c-.015-.658-.328-.987-.938-.987-.585 0-.916.329-.98.987h1.918zM14.07 10.15h-2.5v.643h2.5v-.643zM24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zm-3.111 0c0-4.909-3.98-8.889-8.889-8.889S3.111 7.091 3.111 12s3.98 8.889 8.889 8.889 8.889-3.98 12-8.889z" />
+  </svg>
+);
+
+const YoutubeIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+  </svg>
+);
+
 export default function Home() {
   return (
     <PageFade>
@@ -103,9 +143,33 @@ export default function Home() {
 
               {/* Add your social links */}
               <div className="flex gap-6 text-neutral-500 mt-2">
-                <a href="https://www.instagram.com/vex_alchemy/" className="hover:text-black transition-colors">Instagram</a>
-                <a href="https://www.behance.net/vex_alchemy" className="hover:text-black transition-colors">Behance</a>
-                <a href="#" className="hover:text-black transition-colors">Vimeo</a>
+                <a
+                  href="https://www.instagram.com/vex_alchemy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-black transition-colors"
+                >
+                  <InstagramIcon />
+                  Instagram
+                </a>
+                <a
+                  href="https://www.behance.net/vex_alchemy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-black transition-colors"
+                >
+                  <BehanceIcon />
+                  Behance
+                </a>
+                <a
+                  href="https://www.youtube.com/@vex_alchemy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-black transition-colors"
+                >
+                  <YoutubeIcon />
+                  YouTube
+                </a>
               </div>
             </div>
           </div>
