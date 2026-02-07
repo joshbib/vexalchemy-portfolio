@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const vertexShader = `
@@ -55,39 +55,54 @@ const fragmentShader = `
   }
 `;
 
-function BackgroundParticles() {
+// Device-specific configurations
+const DEVICE_CONFIG = {
+  mobile: {
+    particleCount: 5000, // Higher density for mobile as requested
+    pointSize: 2.5,
+    spreadMultiplier: 1.3, // Extra coverage for mobile
+    cursorRadius: 4.0,
+    opacity: 0.24, // Slightly higher for better visibility
+  },
+  desktop: {
+    particleCount: 8000,
+    pointSize: 2.8,
+    spreadMultiplier: 1.2,
+    cursorRadius: 5.0,
+    opacity: 0.22,
+  },
+};
+
+function BackgroundParticles({ isMobile }: { isMobile: boolean }) {
   const { camera, size } = useThree();
   
   const cursorPos = useRef(new THREE.Vector2(0, 0));
   const targetCursor = useRef(new THREE.Vector2(0, 0));
   const scrollFactor = useRef(0);
 
-  // Calculate responsive spread based on viewport aspect ratio and camera setup
+  // Select config based on device
+  const config = isMobile ? DEVICE_CONFIG.mobile : DEVICE_CONFIG.desktop;
+
+  // Calculate responsive spread - STABLE (only recalculates on device type change)
   const { spreadX, spreadY } = useMemo(() => {
     const aspect = size.width / size.height;
-    const fov = 50; // matches camera FOV
-    const distance = 30; // matches camera Z position
+    const fov = 50;
+    const distance = 30;
     
-    // Calculate visible width and height at the particle plane (z=0)
     const vFOV = (fov * Math.PI) / 180;
     const visibleHeight = 2 * Math.tan(vFOV / 2) * distance;
     const visibleWidth = visibleHeight * aspect;
     
-    // Add 20% padding to ensure full coverage with drift
-    const spreadX = visibleWidth * 1.2;
-    const spreadY = visibleHeight * 1.2;
+    // Use device-specific multiplier
+    const spreadX = visibleWidth * config.spreadMultiplier;
+    const spreadY = visibleHeight * config.spreadMultiplier;
     
     return { spreadX, spreadY };
-  }, [size.width, size.height]);
+  }, [isMobile, config.spreadMultiplier]); // Only depend on device type, not size
 
+  // Stable geometry - only regenerates on device type change
   const geometry = useMemo(() => {
-    const aspect = size.width / size.height;
-    
-    // Adaptive particle count based on screen size
-    const baseCount = 8000;
-    const mobileThreshold = 768;
-    const isMobile = size.width < mobileThreshold;
-    const count = isMobile ? Math.floor(baseCount * 0.6) : baseCount; // 60% particles on mobile
+    const count = config.particleCount;
     
     const positions = new Float32Array(count * 3);
     const originals = new Float32Array(count * 3);
@@ -111,27 +126,28 @@ function BackgroundParticles() {
     geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geom.setAttribute("originalPosition", new THREE.BufferAttribute(originals, 3));
     return geom;
-  }, [size.width, size.height, spreadX, spreadY]);
+  }, [isMobile, config.particleCount, spreadX, spreadY]); // Stable dependencies
 
-  const material = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        uniforms: {
-          uCursor: { value: new THREE.Vector2(0, 0) },
-          uCursorRadius: { value: 5.0 },
-          uTime: { value: 0 },
-          uScrollFactor: { value: 0 },
-          uColor: { value: new THREE.Color(0.16, 0.15, 0.14) },
-        },
-        vertexShader,
-        fragmentShader,
-        transparent: true,
-        depthTest: false,
-        depthWrite: false,
-        blending: THREE.NormalBlending,
-      }),
-    []
-  );
+  const material = useMemo(() => {
+    const vertShader = vertexShader.replace("gl_PointSize = 2.8;", `gl_PointSize = ${config.pointSize};`);
+    const fragShader = fragmentShader.replace("vAlpha = 0.22", `vAlpha = ${config.opacity}`);
+    
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uCursor: { value: new THREE.Vector2(0, 0) },
+        uCursorRadius: { value: config.cursorRadius },
+        uTime: { value: 0 },
+        uScrollFactor: { value: 0 },
+        uColor: { value: new THREE.Color(0.14, 0.14, 0.14) },
+      },
+      vertexShader: vertShader,
+      fragmentShader: fragShader,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+    });
+  }, [isMobile, config]);
 
   useEffect(() => {
     const vector = new THREE.Vector3();
@@ -188,21 +204,53 @@ type SphericalDotGridProps = {
   className?: string;
 };
 
-// Keep original component name for drop-in compatibility
 export default function SphericalDotGrid({ className }: SphericalDotGridProps) {
+  // Detect device type on mount - stable across resize
+  const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    
+    // Detect mobile once on mount
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768 || 
+                    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      setIsMobile(mobile);
+    };
+    
+    checkMobile();
+    
+    // Only re-check on orientation change (not on every resize)
+    const handleOrientationChange = () => {
+      checkMobile();
+    };
+    
+    window.addEventListener('orientationchange', handleOrientationChange);
+    
+    return () => {
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!isClient) {
+    return <div className={className} />;
+  }
+
   return (
     <Canvas
       className={className}
       gl={{ 
         antialias: false,
         alpha: true,
-        powerPreference: "low-power"
+        powerPreference: isMobile ? "low-power" : "default",
       }}
       dpr={1}
       camera={{ position: [0, 0, 30], fov: 50 }}
       frameloop="always"
     >
-      <BackgroundParticles />
+      <BackgroundParticles isMobile={isMobile} />
     </Canvas>
   );
 }
