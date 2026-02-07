@@ -44,9 +44,12 @@ img,
 video {
   display: block;
   max-width: 100%;
-  /* FIXED: Removed background: #111; to eliminate video artifacts */
-  /* Enable smooth vertical scrolling over media */
-  touch-action: pan-y;
+  /* CRITICAL: Enable smooth vertical scrolling over media */
+  touch-action: pan-y pan-x;
+  pointer-events: auto;
+  /* Prevent dragging but allow all other interactions */
+  -webkit-user-drag: none;
+  user-drag: none;
 }
 
 ::selection {
@@ -860,6 +863,23 @@ section {
 /* Collage item */
 .collage-item {
   margin-bottom: 1.5rem;
+  /* Ensure scrolling works smoothly over images */
+  pointer-events: auto;
+  touch-action: pan-y;
+  /* Prevent any scroll blocking */
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Ensure collage container allows smooth scrolling */
+.collage {
+  /* Allow touch scrolling through the container */
+  touch-action: pan-y;
+}
+
+.collage-section {
+  /* Ensure section doesn't block scroll */
+  touch-action: auto;
 }
 
 /* -------------------------
@@ -927,9 +947,9 @@ img, video {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-touch-callout: none;
-  /* Allow natural scrolling over media */
+  /* CRITICAL: Allow natural scrolling over media - never block scroll */
   pointer-events: auto;
-  touch-action: pan-y;
+  touch-action: pan-y pan-x;
 }
 
 /* Disable context menu on media containers */
@@ -942,11 +962,13 @@ img, video {
   user-select: none;
 }
 
-/* Additional layer - prevent long press on mobile */
+/* Additional layer - prevent long press on mobile but allow scroll */
 img:active,
 video:active {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  /* Ensure touch scrolling still works even when active */
+  touch-action: pan-y pan-x;
 }
 
 /* Invisible overlay protection for extra security (optional) */
