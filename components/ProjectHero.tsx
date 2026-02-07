@@ -2,17 +2,26 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import MediaBlock from "@/components/MediaBlock";
+import EditorialVideoPlayer from "@/components/EditorialVideoPlayer";
 
 type ProjectHeroProps = {
   slug: string;
   mediaType: "video" | "image";
   src: string;
+  projectTitle?: string;
+  projectYear?: string;
+  currentIndex?: number;
+  totalCount?: number;
 };
 
 export default function ProjectHero({
   slug,
   mediaType,
   src,
+  projectTitle,
+  projectYear,
+  currentIndex = 1,
+  totalCount = 1,
 }: ProjectHeroProps) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -42,17 +51,29 @@ export default function ProjectHero({
           w-full
           px-6
           md:px-16
-          max-w-[1525px]  // ⚠️ THIS IS YOUR CONSTRAINT
+          max-w-[1525px]
           flex
           justify-center
           items-center
         "
       >
-        <MediaBlock
-          type={mediaType}
-          src={src}
-          mode="hero"
-        />
+        {mediaType === "video" ? (
+          <EditorialVideoPlayer
+            src={src}
+            collection="COLLECTION"
+            designerTop={projectTitle?.toUpperCase() || slug.toUpperCase()}
+            designerBottom={projectTitle?.toUpperCase() || slug.toUpperCase()}
+            season={projectYear ? `${projectYear}` : "2024"}
+            currentIndex={currentIndex}
+            totalCount={totalCount}
+          />
+        ) : (
+          <MediaBlock
+            type={mediaType}
+            src={src}
+            mode="hero"
+          />
+        )}
       </div>
 
       {/* Elegant divider */}
@@ -60,3 +81,4 @@ export default function ProjectHero({
     </motion.section>
   );
 }
+

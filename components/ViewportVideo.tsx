@@ -91,12 +91,14 @@ export default function ViewportVideo({ src, poster, className = "" }: ViewportV
         loop
         playsInline
         preload="metadata"
+        crossOrigin="anonymous"
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
         draggable={false}
         controlsList="nodownload nofullscreen noremoteplayback"
         disablePictureInPicture
       />
+
       <div className="video-progress-bar video-progress-bar-hero" />
     </div>
   );

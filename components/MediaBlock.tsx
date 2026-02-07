@@ -40,15 +40,12 @@ export default function MediaBlock({
   }, [type]);
 
   /* -------------------------
-     GRID AUTOPLAY (POSTER)
-  -------------------------- */
+   GRID AUTOPLAY (POSTER)
+    --------------------------- */
   useEffect(() => {
     if (type !== "video" || mode !== "poster" || !videoRef.current) return;
 
     const video = videoRef.current;
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -73,7 +70,7 @@ export default function MediaBlock({
 
     const video = videoRef.current;
     const progressBar = video.nextElementSibling as HTMLElement;
-    
+
     if (!progressBar || !progressBar.classList.contains('video-progress-bar')) return;
 
     const updateProgress = () => {
@@ -101,6 +98,7 @@ export default function MediaBlock({
           src={src}
           alt=""
           loading="lazy"
+          crossOrigin="anonymous"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ touchAction: "pan-y", pointerEvents: "auto" }}
           onContextMenu={(e) => e.preventDefault()}
@@ -117,6 +115,9 @@ export default function MediaBlock({
           src={src}
           preload="none"
           muted
+          loop
+          playsInline
+          crossOrigin="anonymous"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ touchAction: "pan-y", pointerEvents: "auto" }}
           onContextMenu={(e) => e.preventDefault()}
@@ -135,10 +136,11 @@ export default function MediaBlock({
   -------------------------- */
   if (type === "image") {
     return (
-      <img 
-        src={src} 
-        alt="" 
-        className="block max-w-full h-auto" 
+      <img
+        src={src}
+        alt=""
+        crossOrigin="anonymous"
+        className="block max-w-full h-auto"
         style={{ touchAction: "pan-y", pointerEvents: "auto" }}
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
@@ -180,6 +182,7 @@ export default function MediaBlock({
         loop
         playsInline
         preload="auto"
+        crossOrigin="anonymous"
         className="block w-full max-w-full max-h-[58vh] md:max-h-[62vh] lg:max-h-[65vh] h-auto cursor-pointer select-none"
         style={{ touchAction: "pan-y", pointerEvents: "auto" }}
         onContextMenu={(e) => e.preventDefault()}
@@ -188,6 +191,7 @@ export default function MediaBlock({
         controlsList="nodownload nofullscreen noremoteplayback"
         disablePictureInPicture
       />
+
       <div className="video-progress-bar video-progress-bar-hero" />
 
       <span className="sound-hint">

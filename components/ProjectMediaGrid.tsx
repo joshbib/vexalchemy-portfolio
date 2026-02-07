@@ -20,10 +20,12 @@ export default function ProjectMediaGrid({ mediaStack, projectTitle }: ProjectMe
                 alt={media.alt || `${projectTitle} - Image ${index + 1}`}
                 className="block w-full max-w-full h-auto"
                 loading="lazy"
+                crossOrigin="anonymous"
                 onContextMenu={(e) => e.preventDefault()}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
               />
+
             ) : (
               <ViewportVideo
                 src={media.src}

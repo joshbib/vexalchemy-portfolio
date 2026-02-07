@@ -49,7 +49,7 @@ export default function Home() {
             <Link href="/about" className="nav-link text-neutral-600 hover:text-black transition-colors">
               About
             </Link>
-            <a href="mailto:joshibibekraj@gmail.com" className="nav-link text-neutral-600 hover:text-black transition-colors">
+            <a href="mailto:contact@bibekjoshi.com" className="nav-link text-neutral-600 hover:text-black transition-colors">
               Contact
             </a>
           </nav>
@@ -92,16 +92,16 @@ export default function Home() {
 
             <div className="flex flex-col gap-4 text-sm">
               <a 
-                href="mailto:joshibibekraj@gmail.com"
+                href="mailto:hello@bibekjoshi.com"
                 className="text-neutral-600 hover:text-black transition-colors"
               >
-                joshibibekraj@gmail.com
+                hello@bibekjoshi.com
               </a>
               
               {/* Add your social links */}
               <div className="flex gap-6 text-neutral-500 mt-2">
-                <a href="#" className="hover:text-black transition-colors">Instagram</a>
-                <a href="#" className="hover:text-black transition-colors">Twitter</a>
+                <a href="https://www.instagram.com/vex_alchemy/" className="hover:text-black transition-colors">Instagram</a>
+                <a href="https://www.behance.net/vex_alchemy" className="hover:text-black transition-colors">Behance</a>
                 <a href="#" className="hover:text-black transition-colors">Vimeo</a>
               </div>
             </div>

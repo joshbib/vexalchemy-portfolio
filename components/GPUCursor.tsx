@@ -2,7 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
-// Interactive element selectors for hover detection
+// ============================================================================
+// INTERACTIVE ELEMENT DETECTION
+// ============================================================================
+
 const INTERACTIVE_SELECTORS = [
   "a",
   "button",
@@ -17,6 +20,144 @@ const INTERACTIVE_SELECTORS = [
   ".collage-item",
 ];
 
+// ============================================================================
+// COLOR SYSTEM - CENTRALIZED COLOR THEORY
+// ============================================================================
+
+/**
+ * Color system based on perceptual luminance and adaptive contrast.
+ * All cursor color decisions derive from this single model.
+ */
+const COLOR_SYSTEM = {
+  /**
+   * Luminance sampling configuration
+   * Uses Rec. 709 coefficients for perceptual luminance calculation
+   */
+  luminance: {
+    // RGB to luminance coefficients (ITU-R BT.709)
+    coefficients: {
+      red: 0.299,
+      green: 0.587,
+      blue: 0.114,
+    },
+    // Size of sampling area in pixels (creates NxN grid)
+    sampleSize: 5,
+    // Threshold below which background is considered "dark" (0-1 scale)
+    darkThreshold: 0.45,
+    // Hysteresis band to prevent rapid mode switching (prevents flicker)
+    hysteresisBand: 0.08,
+  },
+
+  /**
+   * Cursor appearance modes
+   * Light mode: dark cursor on light backgrounds
+   * Dark mode: light cursor on dark backgrounds
+   */
+  modes: {
+    light: {
+      // Cursor is dark (black) on light backgrounds
+      rgb: { r: 0, g: 0, b: 0 },
+      dot: {
+        opacity: 0.85,
+      },
+      ring: {
+        opacity: 0.5,
+      },
+    },
+    dark: {
+      // Cursor is light (white) on dark backgrounds
+      rgb: { r: 255, g: 255, b: 255 },
+      dot: {
+        opacity: 0.95,
+      },
+      ring: {
+        opacity: 0.7,
+      },
+    },
+  },
+
+  /**
+   * Transition behavior between light and dark modes
+   */
+  transition: {
+    // Interpolation speed for color transitions (0-1)
+    // Higher = faster transition, lower = smoother
+    speed: 0.35,
+  },
+
+  /**
+   * Opacity thresholds for sampling
+   */
+  sampling: {
+    // Minimum alpha to consider a pixel/layer in luminance calculation
+    minAlpha: 0.1,
+    // Alpha threshold to stop sampling deeper layers
+    opaqueThreshold: 0.95,
+  },
+} as const;
+
+// ============================================================================
+// PHYSICS & MOTION CONSTANTS (unchanged)
+// ============================================================================
+
+const MOTION = {
+  // Base interpolation factors for smooth following
+  dot: {
+    baseLerp: 0.22, // Dot follows closer to cursor
+  },
+  ring: {
+    baseLerp: 0.10, // Ring lags behind for parallax effect
+    minLerp: 0.04, // Minimum lerp factor during high velocity
+  },
+
+  // Velocity-based behavior
+  velocity: {
+    lagFactor: 0.0008, // How much velocity affects ring lag
+  },
+
+  // Magnetic attraction to interactive elements
+  magnet: {
+    range: 80, // Distance in pixels where magnetism begins
+    maxStrength: 0.35, // Maximum pull strength (0-1)
+  },
+
+  // Scale response to acceleration
+  scale: {
+    factor: 0.0003, // Acceleration to scale conversion
+    maxDelta: 0.03, // Maximum scale change per frame
+    hover: {
+      dot: 0.7, // Dot shrinks on hover
+      ring: 1.15, // Ring expands on hover
+    },
+    transitions: {
+      dot: 0.12, // Scale interpolation speed for dot
+      ring: 0.10, // Scale interpolation speed for ring
+    },
+  },
+
+  // Hover detection padding
+  hoverPadding: 2,
+} as const;
+
+// ============================================================================
+// GEOMETRY CONSTANTS
+// ============================================================================
+
+const GEOMETRY = {
+  ring: {
+    size: 32,
+    borderWidth: 1.5,
+  },
+  dot: {
+    size: 6,
+  },
+  zIndex: 9999,
+} as const;
+
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
 interface Vec2 {
   x: number;
   y: number;
@@ -28,10 +169,69 @@ interface HoverState {
   center: Vec2 | null;
 }
 
-// Luminance sampling configuration
-const SAMPLE_SIZE = 5; // 5x5 pixel area
-const HYSTERESIS_THRESHOLD = 0.08; // Prevents rapid flipping
-const LUMINANCE_DARK_THRESHOLD = 0.45; // Below this = dark background
+interface RGB {
+  r: number;
+  g: number;
+  b: number;
+}
+
+// ============================================================================
+// COLOR UTILITIES
+// ============================================================================
+
+/**
+ * Calculate perceptual luminance from RGB values
+ * Uses Rec. 709 coefficients for human perception accuracy
+ */
+function calculateLuminance(r: number, g: number, b: number): number {
+  const { coefficients } = COLOR_SYSTEM.luminance;
+  return (
+    coefficients.red * r +
+    coefficients.green * g +
+    coefficients.blue * b
+  ) / 255;
+}
+
+/**
+ * Interpolate between light and dark mode colors
+ * @param t - Interpolation factor (0 = light mode, 1 = dark mode)
+ */
+function interpolateColor(t: number): { rgb: RGB; dot: number; ring: number } {
+  const { light, dark } = COLOR_SYSTEM.modes;
+
+  return {
+    rgb: {
+      r: Math.round(lerp(light.rgb.r, dark.rgb.r, t)),
+      g: Math.round(lerp(light.rgb.g, dark.rgb.g, t)),
+      b: Math.round(lerp(light.rgb.b, dark.rgb.b, t)),
+    },
+    dot: lerp(light.dot.opacity, dark.dot.opacity, t),
+    ring: lerp(light.ring.opacity, dark.ring.opacity, t),
+  };
+}
+
+/**
+ * Format RGB color with opacity as CSS rgba() string
+ */
+function formatRGBA(rgb: RGB, opacity: number): string {
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+}
+
+// ============================================================================
+// MATH UTILITIES
+// ============================================================================
+
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
+function clamp(val: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, val));
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
 
 export default function GPUCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
@@ -39,29 +239,34 @@ export default function GPUCursor() {
   const samplerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const samplerCtxRef = useRef<CanvasRenderingContext2D | null>(null);
 
+  // Check if device supports hover (desktop)
+  const isDesktop = typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
   useEffect(() => {
-    // Create offscreen canvas for sampling
+    // Skip initialization on touch/mobile devices
+    if (!isDesktop) return;
+
+    // ========================================================================
+    // INITIALIZATION
+    // ========================================================================
+
+    // Create offscreen canvas for luminance sampling
     const samplerCanvas = document.createElement("canvas");
-    samplerCanvas.width = SAMPLE_SIZE;
-    samplerCanvas.height = SAMPLE_SIZE;
+    samplerCanvas.width = COLOR_SYSTEM.luminance.sampleSize;
+    samplerCanvas.height = COLOR_SYSTEM.luminance.sampleSize;
     const samplerCtx = samplerCanvas.getContext("2d", { willReadFrequently: true });
     samplerCanvasRef.current = samplerCanvas;
     samplerCtxRef.current = samplerCtx;
 
-    // Current mouse position (raw target)
+    // Position state
     const target: Vec2 = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-
-    // Previous target for velocity calculation
     const prevTarget: Vec2 = { x: target.x, y: target.y };
-
-    // Current velocity
     const velocity: Vec2 = { x: 0, y: 0 };
-
-    // Smoothed positions for each element
     const dotPos: Vec2 = { x: target.x, y: target.y };
     const ringPos: Vec2 = { x: target.x, y: target.y };
 
-    // Latched hover state
+    // Hover state
     const hoverState: HoverState = {
       element: null,
       bounds: null,
@@ -73,40 +278,29 @@ export default function GPUCursor() {
     let currentRingScale = 1;
     let isHovering = false;
 
-    // Luminance state with hysteresis
-    let currentLuminance = 1; // Start light
-    let targetLuminance = 1;
-    let isDarkMode = false; // Current display mode
+    // Color state with hysteresis
+    let isDarkMode = false; // false = light mode (dark cursor), true = dark mode (light cursor)
+    let colorInterpolation = 0; // 0 = light mode, 1 = dark mode
 
-    // Color interpolation
-    let currentColorT = 0; // 0 = black cursor, 1 = white cursor
-
-    // Acceleration tracking
+    // Motion tracking
     let prevSpeed = 0;
-
-    // Base interpolation factors
-    const DOT_BASE_LERP = 0.22;
-    const RING_BASE_LERP = 0.10;
-    const VELOCITY_LAG_FACTOR = 0.0008;
-    const MAGNET_RANGE = 80;
-    const MAGNET_STRENGTH_MAX = 0.35;
-    const SCALE_FACTOR = 0.0003;
-    const MAX_SCALE_DELTA = 0.03;
-
     let animationId: number;
 
-    // Check if point is within bounds
-    const isWithinBounds = (x: number, y: number, bounds: DOMRect, padding = 2): boolean => {
+    // ========================================================================
+    // HOVER DETECTION
+    // ========================================================================
+
+    function isWithinBounds(x: number, y: number, bounds: DOMRect): boolean {
+      const padding = MOTION.hoverPadding;
       return (
         x >= bounds.left - padding &&
         x <= bounds.right + padding &&
         y >= bounds.top - padding &&
         y <= bounds.bottom + padding
       );
-    };
+    }
 
-    // Find interactive element at point
-    const findInteractiveElement = (x: number, y: number): Element | null => {
+    function findInteractiveElement(x: number, y: number): Element | null {
       const elements = document.elementsFromPoint(x, y);
       const selector = INTERACTIVE_SELECTORS.join(", ");
 
@@ -116,117 +310,21 @@ export default function GPUCursor() {
         if (closest) return closest;
       }
       return null;
-    };
+    }
 
-    // Sample luminance from elements at position
-    const sampleLuminance = (x: number, y: number): number => {
-      const elements = document.elementsFromPoint(x, y);
-      let totalLuminance = 0;
-      let sampleCount = 0;
-
-      for (const el of elements) {
-        // Skip cursor elements and transparent elements
-        if (el === ringRef.current || el === dotRef.current) continue;
-
-        // Try to sample from media elements (images, videos, canvas)
-        if (el instanceof HTMLImageElement || el instanceof HTMLVideoElement || el instanceof HTMLCanvasElement) {
-          const luminance = sampleMediaElement(el, x, y);
-          if (luminance !== null) {
-            return luminance; // Media luminance takes priority
-          }
-        }
-
-        // Sample computed background color
-        const computed = window.getComputedStyle(el);
-        const bgColor = computed.backgroundColor;
-
-        // Parse RGBA
-        const match = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
-        if (match) {
-          const r = parseInt(match[1]);
-          const g = parseInt(match[2]);
-          const b = parseInt(match[3]);
-          const a = match[4] ? parseFloat(match[4]) : 1;
-
-          // Only count opaque-ish backgrounds
-          if (a > 0.1) {
-            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-            totalLuminance += luminance * a;
-            sampleCount += a;
-          }
-        }
-
-        // If we hit a fully opaque background, stop
-        const bgMatch = bgColor.match(/rgba?\([^)]+,\s*([\d.]+)\)$/);
-        const alpha = bgMatch ? parseFloat(bgMatch[1]) : 1;
-        if (alpha >= 0.95 && sampleCount > 0) break;
-      }
-
-      // Return average luminance, default to light if nothing found
-      return sampleCount > 0 ? totalLuminance / sampleCount : 0.9;
-    };
-
-    // Sample from media element using canvas
-    const sampleMediaElement = (el: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement, x: number, y: number): number | null => {
-      const ctx = samplerCtxRef.current;
-      if (!ctx) return null;
-
-      try {
-        const rect = el.getBoundingClientRect();
-
-        // Check if point is within element bounds
-        if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-          return null;
-        }
-
-        // Calculate position within the element
-        const scaleX = (el instanceof HTMLCanvasElement ? el.width : (el as HTMLImageElement).naturalWidth || (el as HTMLVideoElement).videoWidth) / rect.width;
-        const scaleY = (el instanceof HTMLCanvasElement ? el.height : (el as HTMLImageElement).naturalHeight || (el as HTMLVideoElement).videoHeight) / rect.height;
-
-        const srcX = Math.floor((x - rect.left) * scaleX) - Math.floor(SAMPLE_SIZE / 2);
-        const srcY = Math.floor((y - rect.top) * scaleY) - Math.floor(SAMPLE_SIZE / 2);
-
-        // Clear and draw sample area
-        ctx.clearRect(0, 0, SAMPLE_SIZE, SAMPLE_SIZE);
-        ctx.drawImage(el, srcX, srcY, SAMPLE_SIZE, SAMPLE_SIZE, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE);
-
-        // Read pixels
-        const imageData = ctx.getImageData(0, 0, SAMPLE_SIZE, SAMPLE_SIZE);
-        const data = imageData.data;
-
-        let totalLuminance = 0;
-        let pixelCount = 0;
-
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          const a = data[i + 3] / 255;
-
-          if (a > 0.1) {
-            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-            totalLuminance += luminance;
-            pixelCount++;
-          }
-        }
-
-        return pixelCount > 0 ? totalLuminance / pixelCount : null;
-      } catch {
-        // Cross-origin or other error
-        return null;
-      }
-    };
-
-    // Update hover state with latching
-    const updateHoverState = (x: number, y: number) => {
+    function updateHoverState(x: number, y: number): void {
+      // Check if still within latched element bounds
       if (hoverState.element && hoverState.bounds) {
         if (isWithinBounds(x, y, hoverState.bounds)) return;
+
+        // Left bounds - clear hover state
         hoverState.element = null;
         hoverState.bounds = null;
         hoverState.center = null;
         isHovering = false;
       }
 
+      // Find new interactive element
       const interactiveEl = findInteractiveElement(x, y);
       if (interactiveEl) {
         const rect = interactiveEl.getBoundingClientRect();
@@ -238,22 +336,154 @@ export default function GPUCursor() {
         };
         isHovering = true;
       }
-    };
+    }
 
-    // Track mouse position
-    const handlePointerMove = (e: PointerEvent) => {
+    // ========================================================================
+    // LUMINANCE SAMPLING
+    // ========================================================================
+
+    /**
+     * Sample luminance from DOM elements at cursor position
+     * Returns value between 0 (black) and 1 (white)
+     */
+    function sampleLuminance(x: number, y: number): number {
+      const elements = document.elementsFromPoint(x, y);
+      let totalLuminance = 0;
+      let sampleCount = 0;
+
+      for (const el of elements) {
+        // Skip cursor elements
+        if (el === ringRef.current || el === dotRef.current) continue;
+
+        // Prioritize media element sampling
+        if (
+          el instanceof HTMLImageElement ||
+          el instanceof HTMLVideoElement ||
+          el instanceof HTMLCanvasElement
+        ) {
+          const luminance = sampleMediaElement(el, x, y);
+          if (luminance !== null) {
+            return luminance; // Media sampling takes priority
+          }
+        }
+
+        // Sample computed background color
+        const computed = window.getComputedStyle(el);
+        const bgColor = computed.backgroundColor;
+
+        // Parse RGBA values
+        const match = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        if (match) {
+          const r = parseInt(match[1]);
+          const g = parseInt(match[2]);
+          const b = parseInt(match[3]);
+          const a = match[4] ? parseFloat(match[4]) : 1;
+
+          // Only consider layers with sufficient opacity
+          if (a > COLOR_SYSTEM.sampling.minAlpha) {
+            const luminance = calculateLuminance(r, g, b);
+            totalLuminance += luminance * a;
+            sampleCount += a;
+          }
+        }
+
+        // Stop at opaque layers
+        const bgMatch = bgColor.match(/rgba?\([^)]+,\s*([\d.]+)\)$/);
+        const alpha = bgMatch ? parseFloat(bgMatch[1]) : 1;
+        if (alpha >= COLOR_SYSTEM.sampling.opaqueThreshold && sampleCount > 0) {
+          break;
+        }
+      }
+
+      // Return weighted average, default to light if nothing sampled
+      return sampleCount > 0 ? totalLuminance / sampleCount : 0.9;
+    }
+
+    /**
+     * Sample luminance from media elements using canvas
+     * Returns null on failure (cross-origin, etc.)
+     */
+    function sampleMediaElement(
+      el: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement,
+      x: number,
+      y: number
+    ): number | null {
+      const ctx = samplerCtxRef.current;
+      if (!ctx) return null;
+
+      try {
+        const rect = el.getBoundingClientRect();
+
+        // Verify cursor is within element bounds
+        if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+          return null;
+        }
+
+        // Calculate source dimensions
+        const srcWidth =
+          el instanceof HTMLCanvasElement
+            ? el.width
+            : (el as HTMLImageElement).naturalWidth || (el as HTMLVideoElement).videoWidth;
+        const srcHeight =
+          el instanceof HTMLCanvasElement
+            ? el.height
+            : (el as HTMLImageElement).naturalHeight || (el as HTMLVideoElement).videoHeight;
+
+        const scaleX = srcWidth / rect.width;
+        const scaleY = srcHeight / rect.height;
+
+        const sampleSize = COLOR_SYSTEM.luminance.sampleSize;
+        const halfSample = Math.floor(sampleSize / 2);
+
+        const srcX = Math.floor((x - rect.left) * scaleX) - halfSample;
+        const srcY = Math.floor((y - rect.top) * scaleY) - halfSample;
+
+        // Sample pixel data
+        ctx.clearRect(0, 0, sampleSize, sampleSize);
+        ctx.drawImage(el, srcX, srcY, sampleSize, sampleSize, 0, 0, sampleSize, sampleSize);
+
+        const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+        const data = imageData.data;
+
+        let totalLuminance = 0;
+        let pixelCount = 0;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3] / 255;
+
+          if (a > COLOR_SYSTEM.sampling.minAlpha) {
+            const luminance = calculateLuminance(r, g, b);
+            totalLuminance += luminance;
+            pixelCount++;
+          }
+        }
+
+        return pixelCount > 0 ? totalLuminance / pixelCount : null;
+      } catch {
+        // Fail safely on cross-origin or other errors
+        return null;
+      }
+    }
+
+    // ========================================================================
+    // EVENT HANDLERS
+    // ========================================================================
+
+    function handlePointerMove(e: PointerEvent): void {
       target.x = e.clientX;
       target.y = e.clientY;
       updateHoverState(e.clientX, e.clientY);
-    };
+    }
 
-    // Helpers
-    const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
-    const clamp = (val: number, min: number, max: number): number => Math.min(max, Math.max(min, val));
+    // ========================================================================
+    // ANIMATION LOOP
+    // ========================================================================
 
-    // Animation loop
-    const animate = () => {
-      // Calculate velocity
+    function animate(): void {
+      // Calculate velocity and acceleration
       velocity.x = target.x - prevTarget.x;
       velocity.y = target.y - prevTarget.y;
       prevTarget.x = target.x;
@@ -263,79 +493,112 @@ export default function GPUCursor() {
       const acceleration = speed - prevSpeed;
       prevSpeed = speed;
 
-      // Sample luminance at dot position (more stable than raw cursor)
-      targetLuminance = sampleLuminance(dotPos.x, dotPos.y);
+      // ======================================================================
+      // COLOR MODE DETERMINATION WITH HYSTERESIS
+      // ======================================================================
 
-      // Apply hysteresis to prevent flicker
+      const sampledLuminance = sampleLuminance(dotPos.x, dotPos.y);
+      const { darkThreshold, hysteresisBand } = COLOR_SYSTEM.luminance;
+
       if (isDarkMode) {
-        // Currently in dark mode (white cursor)
-        // Only switch to light mode if luminance is significantly above threshold
-        if (targetLuminance > LUMINANCE_DARK_THRESHOLD + HYSTERESIS_THRESHOLD) {
+        // Currently showing light cursor - only switch if background becomes light
+        if (sampledLuminance > darkThreshold + hysteresisBand) {
           isDarkMode = false;
         }
       } else {
-        // Currently in light mode (black cursor)
-        // Only switch to dark mode if luminance is significantly below threshold
-        if (targetLuminance < LUMINANCE_DARK_THRESHOLD - HYSTERESIS_THRESHOLD) {
+        // Currently showing dark cursor - only switch if background becomes dark
+        if (sampledLuminance < darkThreshold - hysteresisBand) {
           isDarkMode = true;
         }
       }
 
-      // Smooth color transition (1-2 frame interpolation)
+      // Smooth color interpolation
       const targetColorT = isDarkMode ? 1 : 0;
-      currentColorT = lerp(currentColorT, targetColorT, 0.35);
+      colorInterpolation = lerp(
+        colorInterpolation,
+        targetColorT,
+        COLOR_SYSTEM.transition.speed
+      );
 
-      // Calculate effective target position with magnetic attraction
+      // ======================================================================
+      // POSITION CALCULATION WITH MAGNETISM
+      // ======================================================================
+
       let effectiveTargetX = target.x;
       let effectiveTargetY = target.y;
 
       if (isHovering && hoverState.center) {
-        const dist = Math.hypot(target.x - hoverState.center.x, target.y - hoverState.center.y);
-        if (dist < MAGNET_RANGE) {
-          const strength = Math.min(MAGNET_STRENGTH_MAX, (MAGNET_RANGE - dist) / MAGNET_RANGE * MAGNET_STRENGTH_MAX);
+        const dist = Math.hypot(
+          target.x - hoverState.center.x,
+          target.y - hoverState.center.y
+        );
+
+        if (dist < MOTION.magnet.range) {
+          const strength = Math.min(
+            MOTION.magnet.maxStrength,
+            ((MOTION.magnet.range - dist) / MOTION.magnet.range) * MOTION.magnet.maxStrength
+          );
           effectiveTargetX = lerp(target.x, hoverState.center.x, strength);
           effectiveTargetY = lerp(target.y, hoverState.center.y, strength);
         }
       }
 
-      // Position interpolation
-      dotPos.x = lerp(dotPos.x, effectiveTargetX, DOT_BASE_LERP);
-      dotPos.y = lerp(dotPos.y, effectiveTargetY, DOT_BASE_LERP);
+      // Dot follows cursor closely
+      dotPos.x = lerp(dotPos.x, effectiveTargetX, MOTION.dot.baseLerp);
+      dotPos.y = lerp(dotPos.y, effectiveTargetY, MOTION.dot.baseLerp);
 
-      const velocityLag = speed * VELOCITY_LAG_FACTOR;
-      const ringLerp = Math.max(0.04, RING_BASE_LERP - velocityLag);
+      // Ring lags based on velocity for parallax effect
+      const velocityLag = speed * MOTION.velocity.lagFactor;
+      const ringLerp = Math.max(MOTION.ring.minLerp, MOTION.ring.baseLerp - velocityLag);
       ringPos.x = lerp(ringPos.x, effectiveTargetX, ringLerp);
       ringPos.y = lerp(ringPos.y, effectiveTargetY, ringLerp);
 
-      // Scale calculations
-      const scaleDelta = clamp(acceleration * SCALE_FACTOR, -MAX_SCALE_DELTA, MAX_SCALE_DELTA);
-      const targetDotScale = isHovering ? 0.7 : 1 - scaleDelta;
-      const targetRingScale = isHovering ? 1.15 : 1 + scaleDelta;
+      // ======================================================================
+      // SCALE CALCULATION
+      // ======================================================================
 
-      currentDotScale = lerp(currentDotScale, targetDotScale, 0.12);
-      currentRingScale = lerp(currentRingScale, targetRingScale, 0.10);
+      const scaleDelta = clamp(
+        acceleration * MOTION.scale.factor,
+        -MOTION.scale.maxDelta,
+        MOTION.scale.maxDelta
+      );
 
-      // Interpolated colors (black ↔ white)
-      const colorValue = Math.round(currentColorT * 255);
-      const ringOpacity = lerp(0.5, 0.7, currentColorT);
-      const dotOpacity = lerp(0.85, 0.95, currentColorT);
+      const targetDotScale = isHovering ? MOTION.scale.hover.dot : 1 - scaleDelta;
+      const targetRingScale = isHovering ? MOTION.scale.hover.ring : 1 + scaleDelta;
 
-      const ringColor = `rgba(${colorValue}, ${colorValue}, ${colorValue}, ${ringOpacity})`;
-      const dotColor = `rgba(${colorValue}, ${colorValue}, ${colorValue}, ${dotOpacity})`;
+      currentDotScale = lerp(currentDotScale, targetDotScale, MOTION.scale.transitions.dot);
+      currentRingScale = lerp(currentRingScale, targetRingScale, MOTION.scale.transitions.ring);
 
-      // Apply styles
+      // ======================================================================
+      // COLOR GENERATION FROM UNIFIED SYSTEM
+      // ======================================================================
+
+      const colors = interpolateColor(colorInterpolation);
+      const ringColor = formatRGBA(colors.rgb, colors.ring);
+      const dotColor = formatRGBA(colors.rgb, colors.dot);
+
+      // ======================================================================
+      // APPLY VISUAL UPDATES
+      // ======================================================================
+
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0) translate(-50%, -50%) scale(${currentDotScale})`;
+        dotRef.current.style.transform =
+          `translate3d(${dotPos.x}px, ${dotPos.y}px, 0) translate(-50%, -50%) scale(${currentDotScale})`;
         dotRef.current.style.backgroundColor = dotColor;
       }
 
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%) scale(${currentRingScale})`;
+        ringRef.current.style.transform =
+          `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%) scale(${currentRingScale})`;
         ringRef.current.style.borderColor = ringColor;
       }
 
       animationId = requestAnimationFrame(animate);
-    };
+    }
+
+    // ========================================================================
+    // START ANIMATION
+    // ========================================================================
 
     animate();
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
@@ -344,7 +607,24 @@ export default function GPUCursor() {
       window.removeEventListener("pointermove", handlePointerMove);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [isDesktop]);
+
+  // ==========================================================================
+  // RENDER - Hide on mobile/touch devices
+  // ==========================================================================
+
+  // Don't render anything on touch/mobile devices
+  if (!isDesktop) return null;
+
+  const initialRingColor = formatRGBA(
+    COLOR_SYSTEM.modes.light.rgb,
+    COLOR_SYSTEM.modes.light.ring.opacity
+  );
+
+  const initialDotColor = formatRGBA(
+    COLOR_SYSTEM.modes.light.rgb,
+    COLOR_SYSTEM.modes.light.dot.opacity
+  );
 
   return (
     <>
@@ -353,12 +633,12 @@ export default function GPUCursor() {
         ref={ringRef}
         className="fixed top-0 left-0 pointer-events-none"
         style={{
-          width: 32,
-          height: 32,
+          width: GEOMETRY.ring.size,
+          height: GEOMETRY.ring.size,
           borderRadius: "50%",
-          border: "1.5px solid rgba(0, 0, 0, 0.5)",
+          border: `${GEOMETRY.ring.borderWidth}px solid ${initialRingColor}`,
           backgroundColor: "transparent",
-          zIndex: 9999,
+          zIndex: GEOMETRY.zIndex,
           willChange: "transform",
         }}
       />
@@ -368,11 +648,11 @@ export default function GPUCursor() {
         ref={dotRef}
         className="fixed top-0 left-0 pointer-events-none"
         style={{
-          width: 6,
-          height: 6,
+          width: GEOMETRY.dot.size,
+          height: GEOMETRY.dot.size,
           borderRadius: "50%",
-          backgroundColor: "rgba(0, 0, 0, 0.85)",
-          zIndex: 9999,
+          backgroundColor: initialDotColor,
+          zIndex: GEOMETRY.zIndex,
           willChange: "transform",
         }}
       />

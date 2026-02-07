@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+
+
 /* -------------------------
    TOKENS
 -------------------------- */
@@ -51,7 +53,10 @@ video {
   pointer-events: auto;
   /* Prevent dragging but allow all other interactions */
   -webkit-user-drag: none;
-  user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
 }
 
 ::selection {
@@ -979,12 +984,17 @@ video {
 }
 
 /* Additional layer - prevent long press on mobile but allow scroll */
-img:active,
-video:active {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  /* Ensure touch scrolling still works even when active */
+img,
+video {
+  display: block;
+  max-width: 100%;
+  /* CRITICAL: Enable smooth vertical scrolling over media */
   touch-action: pan-y pan-x;
+  pointer-events: auto;
+  /* Prevent dragging but allow all other interactions */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* Invisible overlay protection for extra security (optional) */
@@ -994,4 +1004,320 @@ video:active {
   inset: 0;
   pointer-events: none;
   user-select: none;
+}
+
+/* -------------------------
+   EDITORIAL VIDEO PLAYER
+   High-fashion lookbook aesthetic
+-------------------------- */
+
+.editorial-video-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+
+  /* No background - video fills naturally */
+  background: transparent;
+}
+
+.editorial-video {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  /* Slight contrast enhancement on hover */
+  filter: contrast(1);
+  transition: filter 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  touch-action: pan-y;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.editorial-video-container.is-active .editorial-video {
+  filter: contrast(1.02);
+}
+
+
+/* Overlay - Fades in on hover */
+.editorial-video-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  padding: 1.25rem;
+
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.06) 0%,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 55%,
+      rgba(0, 0, 0, 0.18) 100%);
+
+  opacity: 0;
+  transition: opacity 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .editorial-video-overlay {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* Row layout - grid for precise alignment */
+.editorial-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+}
+
+.editorial-row>*:first-child {
+  justify-self: start;
+}
+
+.editorial-row>*:last-child {
+  justify-self: end;
+}
+
+/* Top row - COLLECTION / SS2025 (just 2 elements) */
+.editorial-row-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .editorial-row-top {
+    margin-bottom: 0.625rem;
+  }
+}
+
+/* Timeline row */
+.editorial-row-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .editorial-row-timeline {
+    gap: 1rem;
+    margin-bottom: 0.625rem;
+  }
+}
+
+/* Bottom row - uses 5-column grid for alignment */
+.editorial-row-bottom {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto;
+  align-items: center;
+  width: 100%;
+  gap: 0;
+}
+
+.editorial-row-bottom>*:nth-child(1) {
+  justify-self: start;
+}
+
+.editorial-row-bottom>*:nth-child(2) {
+  justify-self: center;
+}
+
+.editorial-row-bottom>*:nth-child(3) {
+  justify-self: center;
+}
+
+.editorial-row-bottom>*:nth-child(4) {
+  justify-self: center;
+}
+
+.editorial-row-bottom>*:nth-child(5) {
+  justify-self: end;
+}
+
+
+/* Typography */
+.editorial-label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .editorial-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+}
+
+.editorial-designer-top {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .editorial-designer-top {
+    font-size: 11px;
+  }
+}
+
+.editorial-designer-bottom {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .editorial-designer-bottom {
+    font-size: 11px;
+  }
+}
+
+.editorial-season {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .editorial-season {
+    font-size: 10px;
+  }
+}
+
+.editorial-index {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .editorial-index {
+    font-size: 10px;
+  }
+}
+
+/* Time display */
+.editorial-time {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.7);
+  min-width: 2rem;
+}
+
+.editorial-time:first-child {
+  text-align: left;
+}
+
+.editorial-time:last-child {
+  text-align: right;
+}
+
+@media (min-width: 768px) {
+  .editorial-time {
+    font-size: 10px;
+    min-width: 2.5rem;
+  }
+}
+
+/* Timeline */
+.editorial-timeline {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.editorial-timeline-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* Control buttons */
+.editorial-control-btn {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0;
+
+  cursor: pointer;
+
+  transition: color 200ms ease, opacity 200ms ease;
+}
+
+.editorial-control-btn:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.editorial-control-btn:active {
+  opacity: 0.7;
+}
+
+@media (min-width: 768px) {
+  .editorial-control-btn {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  .editorial-video-container,
+  .editorial-video,
+  .editorial-video-overlay,
+  .editorial-timeline-progress,
+  .editorial-control-btn {
+    transition: none !important;
+  }
+
+  .editorial-video-overlay {
+    opacity: 1;
+  }
 }

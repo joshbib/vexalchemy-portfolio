@@ -20,6 +20,7 @@ export default function CollageStack() {
               src={src}
               alt={`Visual study ${i + 1}`}
               loading="lazy"
+              crossOrigin="anonymous"
               className="collage-item mb-6"
               onContextMenu={(e) => e.preventDefault()}
               onDragStart={(e) => e.preventDefault()}

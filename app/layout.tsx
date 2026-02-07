@@ -1,10 +1,10 @@
-// app/layout.tsx - MINIMAL LAYOUT WITH GPU CURSOR
+// app/layout.tsx - COMPLETE WITH FULLSCREEN DOT GRID + GPU CURSOR
 import "./globals.css";
 import "./accessibility.css";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import MediaProtection from "@/components/MediaProtection";
-import GPUCursor from "@/components/GPUCursor";
+import GPUCursor from "@/components/GPUCursor"; // ← ADD THIS LINE
 
 export const metadata: Metadata = {
   title: {
@@ -56,11 +56,16 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         {/* Global media protection */}
         <MediaProtection />
-
-        {/* Custom cursor */}
+        
+        {/* GPU Cursor Effect - ADD THIS BLOCK */}
         <GPUCursor />
+        
+        {/* Fixed fullscreen dot grid background */}
+        <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+          
+        </div>
 
-        {/* Main content */}
+        {/* Main content - positioned above the background */}
         <div className="relative z-10">
           <Suspense fallback={null}>
             {children}

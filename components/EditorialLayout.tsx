@@ -33,25 +33,25 @@ function LayoutBlockRenderer({
   switch (block.layout) {
     case "full":
       return <FullLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "two-up":
       return <TwoUpLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "three-up":
       return <ThreeUpLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "left-heavy":
       return <LeftHeavyLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "right-heavy":
       return <RightHeavyLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "vertical-stack":
       return <VerticalStackLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "offset-duo":
       return <OffsetDuoLayout media={block.media} projectTitle={projectTitle} index={index} />;
-    
+
     case "caption-hero":
       return (
         <CaptionHeroLayout
@@ -62,7 +62,7 @@ function LayoutBlockRenderer({
           index={index}
         />
       );
-    
+
     default:
       return null;
   }
@@ -274,7 +274,7 @@ function OffsetDuoLayout({
             className=""
           />
         </div>
-        
+
         {/* Foreground image - offset and elevated */}
         <div className="relative md:absolute md:bottom-[-10%] md:right-[5%] mt-6 md:mt-0 md:w-[45%]">
           <MediaRenderer
@@ -285,7 +285,7 @@ function OffsetDuoLayout({
           />
         </div>
       </div>
-      
+
       {/* Spacer to prevent overlap on mobile */}
       <div className="h-0 md:h-20" />
     </div>
@@ -345,7 +345,7 @@ function MediaRenderer({
     if (media.type !== "video" || !videoRef.current) return;
 
     const video = videoRef.current;
-    
+
     // Set video properties
     video.muted = true;
     video.loop = true;
@@ -364,7 +364,7 @@ function MediaRenderer({
           video.pause();
         }
       },
-      { 
+      {
         threshold: 0.4 // Play when 40% visible (same as MediaBlock)
       }
     );
@@ -387,10 +387,12 @@ function MediaRenderer({
         alt={media.alt || `${projectTitle} - Image ${index + 1}`}
         className={naturalClasses}
         loading="lazy"
+        crossOrigin="anonymous"
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
         draggable={false}
       />
+
     );
   }
 
@@ -405,11 +407,13 @@ function MediaRenderer({
       loop
       playsInline
       preload="metadata"
+      crossOrigin="anonymous"
       onContextMenu={(e) => e.preventDefault()}
       onDragStart={(e) => e.preventDefault()}
       draggable={false}
       controlsList="nodownload nofullscreen noremoteplayback"
       disablePictureInPicture
     />
+
   );
 }

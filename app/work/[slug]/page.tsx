@@ -88,6 +88,10 @@ export default async function ProjectPage({ params }: PageProps) {
             slug={project.slug}
             mediaType={project.mediaType}
             src={project.src}
+            projectTitle={project.title}
+            projectYear={project.year}
+            currentIndex={index + 1}
+            totalCount={projects.length}
           />
 
           {/* ========================================

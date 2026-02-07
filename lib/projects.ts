@@ -9,7 +9,7 @@ export const projects: Project[] = [
     title: "Work Space",
     year: "2024",
     description:
-      "Exploration of procedural transformation and organic motion using Houdini.",
+      "An exploration of organic motion and spatial balance. Focused on subtle movement, clean forms, and system-driven design.",
     mediaType: "video",
     src: "https://cdn.bibekjoshi.com/Grass/render_grass.mp4",
 
@@ -50,7 +50,7 @@ export const projects: Project[] = [
     title: "Watch Landscape",
     year: "2023",
     description:
-      "Artifacts generated through rule-based systems and controlled noise.",
+      "An exploration of form, scale, and stillness. Shaped through structure and subtle variation.",
     mediaType: "video",
     src: "https://cdn.bibekjoshi.com/Grain/final.mov",
     poster: "/projects/watch-landscape/poster.jpg",
@@ -81,7 +81,7 @@ export const projects: Project[] = [
     title: "Automobile Porsche",
     year: "2025",
     description:
-      "High-resolution fluid simulations exploring tension, release, and form.",
+      "A quiet study of motion and form.",
     mediaType: "video",
     src: "https://cdn.bibekjoshi.com/Automobile/Final.mp4",
     poster: "/projects/fluid-rituals/poster.jpg",
@@ -123,7 +123,7 @@ export const projects: Project[] = [
     title: "Fluid Droplet",
     year: "2025",
     description:
-      "High-resolution fluid simulations exploring tension, release, and form.",
+      "A quiet observation of surface tension and form.",
     mediaType: "video",
     src: "https://cdn.bibekjoshi.com/Dropper/Final_Dropper.mp4",
     poster: "/projects/fluid-rituals/poster.jpg",

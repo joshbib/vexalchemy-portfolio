@@ -48,10 +48,12 @@ export default function ProjectMediaStack({ media }: Props) {
                     group-hover:scale-[1.02]
                   "
                   loading="lazy"
+                  crossOrigin="anonymous"
                   onContextMenu={(e) => e.preventDefault()}
                   onDragStart={(e) => e.preventDefault()}
                   draggable={false}
                 />
+
                 {item.caption && (
                   <div className="
                     absolute
@@ -87,6 +89,7 @@ export default function ProjectMediaStack({ media }: Props) {
                 poster={item.poster}
                 controls
                 preload="metadata"
+                crossOrigin="anonymous"
                 className="
                   w-full
                   h-full
@@ -98,6 +101,7 @@ export default function ProjectMediaStack({ media }: Props) {
                 controlsList="nodownload nofullscreen noremoteplayback"
                 disablePictureInPicture
               />
+
             </div>
           );
         })}
