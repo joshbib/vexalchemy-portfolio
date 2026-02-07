@@ -43,15 +43,21 @@ export default function EditorialVideoPlayer({
     const [duration, setDuration] = useState(0);
     const [isMobileOverlayVisible, setIsMobileOverlayVisible] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [hasMounted, setHasMounted] = useState(false);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-    // Check for reduced motion preference
-    const prefersReducedMotion =
-        typeof window !== "undefined" &&
-        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
-    // Detect touch device
+    // Initial hydration and browser checks
     useEffect(() => {
+        setHasMounted(true);
+
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        setPrefersReducedMotion(mediaQuery.matches);
+
         setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+
+        const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+        mediaQuery.addEventListener("change", listener);
+        return () => mediaQuery.removeEventListener("change", listener);
     }, []);
 
     // Auto-play on mount
@@ -190,9 +196,9 @@ export default function EditorialVideoPlayer({
             <div
                 className="editorial-video-overlay"
                 style={{
-                    opacity: showOverlay ? 1 : 0,
-                    pointerEvents: showOverlay ? "auto" : "none",
-                    transition: prefersReducedMotion ? "none" : undefined,
+                    opacity: hasMounted && showOverlay ? 1 : 0,
+                    pointerEvents: hasMounted && showOverlay ? "auto" : "none",
+                    transition: hasMounted && prefersReducedMotion ? "none" : undefined,
                 }}
             >
                 {/* Row 1: COLLECTION — SS2025 */}

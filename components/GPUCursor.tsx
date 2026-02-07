@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // INTERACTIVE ELEMENT DETECTION
@@ -239,13 +239,18 @@ export default function GPUCursor() {
   const samplerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const samplerCtxRef = useRef<CanvasRenderingContext2D | null>(null);
 
-  // Check if device supports hover (desktop)
-  const isDesktop = typeof window !== "undefined" &&
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  // SSR-safe: Start with null, determine after mount
+  const [shouldRender, setShouldRender] = useState(false);
+
+  // Check for desktop after hydration (avoids SSR mismatch)
+  useEffect(() => {
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    setShouldRender(isDesktop);
+  }, []);
 
   useEffect(() => {
-    // Skip initialization on touch/mobile devices
-    if (!isDesktop) return;
+    // Skip initialization until we know we should render
+    if (!shouldRender) return;
 
     // ========================================================================
     // INITIALIZATION
@@ -607,14 +612,14 @@ export default function GPUCursor() {
       window.removeEventListener("pointermove", handlePointerMove);
       cancelAnimationFrame(animationId);
     };
-  }, [isDesktop]);
+  }, [shouldRender]);
 
   // ==========================================================================
   // RENDER - Hide on mobile/touch devices
   // ==========================================================================
 
   // Don't render anything on touch/mobile devices
-  if (!isDesktop) return null;
+  if (!shouldRender) return null;
 
   const initialRingColor = formatRGBA(
     COLOR_SYSTEM.modes.light.rgb,
